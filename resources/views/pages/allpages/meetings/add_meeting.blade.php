@@ -46,7 +46,6 @@
                                     <input type="number" class="form-control" id="txtResourceContactNo">
                                 </div>
                             </div>
-                            <hr>
                             <div class="col-sm-12 col-md-6 mt-3">
                                 <div class="form-group">
                                     <label>Meeting Type</label>
@@ -59,7 +58,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
+                            <div class="col-sm-12 col-md-6 mt-3 d-none" id="btnShowDivision">
                                 <div class="form-group">
                                     <label>Division</label>
                                     <select id="txtDivision">
@@ -70,19 +69,36 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
+                            <div class="col-sm-12 col-md-6 mt-3 d-none" id="btnShowVIllage">
                                 <div class="form-group">
                                     <label>Village</label>
                                     <select id="txtVillage">
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
+                            <div class="col-sm-12 col-md-6 mt-3 d-none" id="btnShowSmallgroup">
                                 <div class="form-group">
                                     <label>Small Group</label>
                                     <select id="txtSmallGroup">
                                     </select>
                                 </div>
+                            </div>
+                            <hr class="mt-5">
+                            <table class="table table-striped" id="showMember">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Member Name</th>
+                                        <th>NIC</th>
+                                        <th>Old Account Number</th>
+                                        <th>Absent</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="col-12 mt-3 d-flex justify-content-end">
+                                <button class="btn btn-primary" id="btnSaveMeeting">Save</button>
                             </div>
                         </div>
                     </div>

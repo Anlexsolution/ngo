@@ -555,12 +555,7 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
-                            <div data-i18n="View Meetings">View Meetings</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="/manage_meetings" class="menu-link">
                             <div data-i18n="Manage Meetings"> Meetings</div>
                         </a>
                     </li>
