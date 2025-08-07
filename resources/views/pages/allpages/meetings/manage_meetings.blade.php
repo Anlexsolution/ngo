@@ -29,9 +29,9 @@
                                     @foreach ($meetingData as $meeting)
                                         <tr>
                                             <td>{{ $count++ }}</td>
-                                            <td>{{ $meeting->meeting_title }}</td>
+                                            <td> <a href="{{ route('view_meetings', $meeting->id) }}">{{ $meeting->meeting_title }}</a> </td>
                                             <td>{{ $meeting->meeting_date }}</td>
-                                            <td>{{ $meeting->meeting_time }}</td>
+                                            <td>  {{ \Carbon\Carbon::parse($meeting->meeting_time)->format('h:i A') }}</td>
                                             <td>{{ $meeting->resource_person }}</td>
                                             <td>{{ $meeting->meeting_type }}</td>
                                             <td>  <div class="dropdown">
@@ -42,8 +42,6 @@
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="#">
                                                 Edit</a>
-                                            <a class="dropdown-item" href="#">
-                                                Delete</a>
                                         </div>
                                     </div></td>
                                         </tr>

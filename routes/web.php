@@ -333,6 +333,7 @@ Route::get('/view_member_saving_report/{id}', [manage_reports_controller::class,
 //Manage Meetings
 Route::get('/add_meeting', [manage_meeting_controller::class, 'addMeetings'])->middleware('auth');
 Route::get('/manage_meetings', [manage_meeting_controller::class, 'manage_meetings'])->middleware('auth');
+Route::get('/view_meetings/{id}', [manage_meeting_controller::class, 'view_meetings'])->middleware('auth')->name('view_meetings');
 
 Route::post('/get-meeting-village-data', [manage_meeting_controller::class, 'getMeetingVillageData'])->middleware('auth');
 Route::post('/get-meeting-smallgroup-data', [manage_meeting_controller::class, 'getMeetingSmallgroupData'])->middleware('auth');
