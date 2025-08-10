@@ -4,8 +4,93 @@ $(document).ready(function () {
     $('#txtVillage').selectize();
     $('#txtSmallGroup').selectize();
     $('#showMember').dataTable();
+
 });
 
+
+//Get Resource Person Data
+$('body').on('change', '#txtResourcePerson', function () {
+    $("#loader").show();
+    var formData = new FormData();
+
+    // Get the CSRF token
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    formData.append("_token", CSRF_TOKEN);
+    // Get the CSRF token
+
+    var txtResourcePerson = $('#txtResourcePerson').val();
+    formData.append('txtResourcePerson', txtResourcePerson);
+
+    if (txtResourcePerson == '') {
+        $.alert({
+            title: "Error!",
+            content: "Please select Resource person",
+            type: "red",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                    action: function () {
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+        return false;
+    }
+
+    getUserLocation().then(({ latitude, longitude }) => {
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
+        makeAjaxRequestGet(formData);
+    });
+
+});
+
+function makeAjaxRequestGet(formData) {
+    $.ajax({
+        url: "/get-resource-person-data",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            $("#loader").show();
+        },
+        success: function (response) {
+            $("#loader").hide();
+            if (response.code === 200) {
+                $('#txtResourcePosition').val(response.designation);
+                $('#txtResourceContactNo').val(response.contact_no);
+                $("#loader").hide();
+            } else {
+                $.alert({
+                    title: "Alert",
+                    content: "Something went wrong",
+                    icon: "fa fa-exclamation-triangle",
+                    type: "red",
+                    theme: "modern",
+                    buttons: {
+                        okay: {
+                            text: "Okay",
+                            btnClass: "btn-red",
+                            action: function () {
+                                $("#page-loader").hide();
+                            },
+                        },
+                    },
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            $("#loader").hide();
+            console.error("Error:", error);
+            showAlert("Error!", "Something went wrong!");
+        },
+    });
+}
+//Get Resource Person Data
 
 //Get VIllage
 $('body').on('change', '#txtDivision', function () {
@@ -229,7 +314,7 @@ function makeAjaxRequestSmall(formData) {
                 $("#txtSmallGroup").selectize();
 
                 // Populate members
-                if ($('#txtMeetingType').val() == 'Village Meeting') {
+                if ($('#txtMeetingType').val() == 'Village Meeting' || $('#txtMeetingType').val() == 'Awarness Meeting') {
                     const tableId = '#showMember';
 
                     // If DataTable already initialized, use its API
@@ -436,14 +521,37 @@ $('body').on('change', '#txtMeetingType', function () {
         $('#btnShowDivision').removeClass('d-none');
         $('#btnShowVIllage').removeClass('d-none');
         $('#btnShowSmallgroup').removeClass('d-none');
+        $('#txtGroupMeetingQustions').removeClass('d-none');
+        $('#txtVillageMeetingQustions').addClass('d-none');
+        $('#txtAwarnessMeetingQustions').addClass('d-none');
     } else if (txtMeetingType == 'Village Meeting') {
         $('#btnShowDivision').removeClass('d-none');
         $('#btnShowVIllage').removeClass('d-none');
         $('#btnShowSmallgroup').addClass('d-none');
+        $('#txtGroupMeetingQustions').addClass('d-none');
+        $('#txtVillageMeetingQustions').removeClass('d-none');
+        $('#txtAwarnessMeetingQustions').addClass('d-none');
     } else if (txtMeetingType == 'Division Meeting') {
         $('#btnShowDivision').removeClass('d-none');
         $('#btnShowVIllage').addClass('d-none');
         $('#btnShowSmallgroup').addClass('d-none');
+        $('#txtGroupMeetingQustions').addClass('d-none');
+        $('#txtVillageMeetingQustions').addClass('d-none');
+        $('#txtAwarnessMeetingQustions').addClass('d-none');
+    } else if (txtMeetingType == 'Awarness Meeting') {
+        $('#btnShowDivision').removeClass('d-none');
+        $('#btnShowVIllage').removeClass('d-none');
+        $('#btnShowSmallgroup').addClass('d-none');
+        $('#txtGroupMeetingQustions').addClass('d-none');
+        $('#txtVillageMeetingQustions').addClass('d-none');
+        $('#txtAwarnessMeetingQustions').removeClass('d-none');
+    } else {
+        $('#btnShowDivision').addClass('d-none');
+        $('#btnShowVIllage').addClass('d-none');
+        $('#btnShowSmallgroup').addClass('d-none');
+        $('#txtGroupMeetingQustions').addClass('d-none');
+        $('#txtVillageMeetingQustions').addClass('d-none');
+        $('#txtAwarnessMeetingQustions').addClass('d-none');
     }
 });
 
@@ -459,7 +567,8 @@ $('body').on('click', '#btnSaveMeeting', function () {
     // Meeting Info
     formData.append('meetingTitle', $('#txtMeetingTitle').val());
     formData.append('meetingDate', $('#txtMeetingDate').val());
-    formData.append('meetingTime', $('#txtMeetingTime').val());
+    formData.append('meetingStartTime', $('#txtMeetingStartTime').val());
+    formData.append('meetingEndTime', $('#txtMeetingEndTime').val());
     formData.append('resourcePerson', $('#txtResourcePerson').val());
     formData.append('resourcePosition', $('#txtResourcePosition').val());
     formData.append('resourceContactNo', $('#txtResourceContactNo').val());
@@ -470,21 +579,79 @@ $('body').on('click', '#btnSaveMeeting', function () {
 
     // === Collect Members Attendance + Remarks ===
     const memberData = [];
+
     $('#showMember tbody tr').each(function () {
         const $row = $(this);
-        const memberId = $row.find('.absent-checkbox').data('id');
-        const isAbsent = $row.find('.absent-checkbox').is(':checked') ? 1 : 0;
+        const $checkedRadio = $row.find('input[type="radio"]:checked');
+
+        const memberId = $checkedRadio.data('id');
+        const isAbsent = $checkedRadio.val();
         const remarks = $row.find('.remarks-textarea').val();
 
         memberData.push({
             memberId: memberId,
-            isAbsent: isAbsent,
+            isAbsent: Number(isAbsent),
             remarks: remarks
         });
     });
 
-    // Append JSON version of members data
     formData.append('memberData', JSON.stringify(memberData));
+
+    let groupMeetingdata = {
+        TeamLeadersAbility: $("#txtTeamLeadersAbility").val(),
+        AccountStatement: $("#txtAccountStatement").val(),
+        ActivityStatement: $("#txtActivityStatement").val(),
+        Decision: $("input[name='decision']:checked").val() || "",
+        DecisionReason: $("#txtDecisionReson").val(),
+        GroupActivity: $("#txtGroupActivity").val(),
+        ReasonForNotDoingTeamWork: $("#txtResonFOrNotDoingTeamWork").val(),
+        MemberInterestGroupMeeting: $("#txtMemberInterstingGroupMeeting").val(),
+        EffectForTeamWork: $("#txtEffectForTeamWork").val(),
+        AreaManagerOpinion: $("#txtAreaManageOpinion").val(),
+        RegionalManagerFeedback: $("#txtRegionalManagerFeedback").val()
+    };
+
+    formData.append('groupMeetingData', JSON.stringify(groupMeetingdata, null, 2));
+
+    let container = $("#txtVillageMeetingQustions");
+    let dataVIllage = {};
+
+    // Handle inputs and textareas with ID or name
+    container.find("input, select, textarea").each(function () {
+        let el = $(this);
+        let id = el.attr("id");
+        let name = el.attr("name");
+
+        // For radio buttons, only get checked value once per name group
+        if (el.is("[type=radio]")) {
+            if (dataVIllage[name] === undefined) { // only if not already set
+                let checkedVal = container.find(`input[name='${name}']:checked`).val() || "";
+                dataVIllage[name] = checkedVal;
+            }
+        } else {
+            // For select, text, number, textarea - use ID or name as key
+            let key = id || name;
+            if (key) {
+                dataVIllage[key] = el.val();
+            }
+        }
+    });
+
+    formData.append('villageMeetingData', JSON.stringify(dataVIllage, null, 2));
+
+    let containerAwarness = $("#txtAwarnessMeetingQustions");
+    let dataAwarness = {};
+
+    containerAwarness.find("input, textarea, select").each(function () {
+        let el = $(this);
+        let key = el.attr("id") || el.attr("name");
+        if (key) {
+            dataAwarness[key] = el.val();
+        }
+    });
+
+    formData.append('awarnessMeetingData', JSON.stringify(dataAwarness, null, 2));
+
 
     // === Send AJAX ===
     $.ajax({

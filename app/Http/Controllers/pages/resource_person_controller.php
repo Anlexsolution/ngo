@@ -22,85 +22,117 @@ use Session;
 class resource_person_controller extends Controller
 {
 
-public function addResourcePerson(Request $request)
-{
-    try {
-        // Check CSRF token
-        if ($request->_token !== Session::token()) {
-            return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
-        }
 
-        // Get form values
-        $txtFullName          = $request->input('txtFullName');
-        $txtDivision          = $request->input('txtDivision');
-        $txtVillage           = $request->input('txtVillage');
-        $txType               = $request->input('txType');
-        $txtDesignation       = $request->input('txtDesignation');
-        $txtMainQualification = $request->input('txtMainQualification');
-        $txtSubQualification  = $request->input('txtSubQualification');
-        $txtDateOfBirth       = $request->input('txtDateOfBirth');
-        $txtNic               = $request->input('txtNic');
-        $txtContactNo         = $request->input('txtContactNo');
-        $txtWhatsappNo        = $request->input('txtWhatsappNo');
+    public function getResourcePersonData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
 
-        // Get location information
-        $latitude  = $request->input('latitude');
-        $longitude = $request->input('longitude');
-
-        $geoData  = GeolocationHelper::getGeolocationData($latitude, $longitude);
-        $location = $geoData['location'];
-        $country  = $geoData['country'];
-
-        // Prepare activity log data
-        $ipAddress       = $request->ip();
-        $activityMessage = 'Created new Resource Person: ' . $txtFullName;
-        $type            = 'Insert';
-        $className       = 'bg-primary';
-
-        // Prepare data for insert
-        $table = 'resourcepeople';
-        $data = [
-            'full_name'          => $txtFullName,
-            'division_id'        => $txtDivision,
-            'village_id'         => $txtVillage,
-            'type'               => $txType,
-            'designation'        => $txtDesignation,
-            'main_qualification' => $txtMainQualification,
-            'sub_qualification'  => $txtSubQualification,
-            'date_of_birth'      => $txtDateOfBirth,
-            'nic'                => $txtNic,
-            'contact_no'         => $txtContactNo,
-            'whatsapp_no'        => $txtWhatsappNo,
-            'created_at'         => now(),
-            'updated_at'         => now(),
-        ];
-
-        // Insert into database
-        $result = InsertHelper::insertRecord($table, $data);
-
-        if ($result === true) {
-            // Log activity AFTER success
-            activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
-
+            $getResorceId = $request->input('txtResourcePerson');
+            $getResData = DB::table('resourcepeople')->where('id', $getResorceId)->first();
+            $contact_no = $getResData->contact_no;
+            $designation = $getResData->designation;
             return response()->json([
                 'success' => 'Resource Person created successfully',
-                'code'    => 200
+                'code'    => 200,
+                'contact_no' => $contact_no,
+                "designation" => $designation
             ]);
-        } else {
-            return response()->json(['error' => $result['error'], 'code' => 500]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code'  => 500,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code'  => 500,
+            ]);
         }
-    } catch (\Illuminate\Database\QueryException $e) {
-        return response()->json([
-            'error' => 'Database error: ' . $e->getMessage(),
-            'code'  => 500,
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'An unexpected error occurred: ' . $e->getMessage(),
-            'code'  => 500,
-        ]);
     }
-}
+
+    public function addResourcePerson(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            // Get form values
+            $txtFullName          = $request->input('txtFullName');
+            $txtDivision          = $request->input('txtDivision');
+            $txtVillage           = $request->input('txtVillage');
+            $txType               = $request->input('txType');
+            $txtDesignation       = $request->input('txtDesignation');
+            $txtMainQualification = $request->input('txtMainQualification');
+            $txtSubQualification  = $request->input('txtSubQualification');
+            $txtDateOfBirth       = $request->input('txtDateOfBirth');
+            $txtNic               = $request->input('txtNic');
+            $txtContactNo         = $request->input('txtContactNo');
+            $txtWhatsappNo        = $request->input('txtWhatsappNo');
+
+            // Get location information
+            $latitude  = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData  = GeolocationHelper::getGeolocationData($latitude, $longitude);
+            $location = $geoData['location'];
+            $country  = $geoData['country'];
+
+            // Prepare activity log data
+            $ipAddress       = $request->ip();
+            $activityMessage = 'Created new Resource Person: ' . $txtFullName;
+            $type            = 'Insert';
+            $className       = 'bg-primary';
+
+            // Prepare data for insert
+            $table = 'resourcepeople';
+            $data = [
+                'full_name'          => $txtFullName,
+                'division_id'        => $txtDivision,
+                'village_id'         => $txtVillage,
+                'type'               => $txType,
+                'designation'        => $txtDesignation,
+                'main_qualification' => $txtMainQualification,
+                'sub_qualification'  => $txtSubQualification,
+                'date_of_birth'      => $txtDateOfBirth,
+                'nic'                => $txtNic,
+                'contact_no'         => $txtContactNo,
+                'whatsapp_no'        => $txtWhatsappNo,
+                'created_at'         => now(),
+                'updated_at'         => now(),
+            ];
+
+            // Insert into database
+            $result = InsertHelper::insertRecord($table, $data);
+
+            if ($result === true) {
+                // Log activity AFTER success
+                activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+
+                return response()->json([
+                    'success' => 'Resource Person created successfully',
+                    'code'    => 200
+                ]);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code'  => 500,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code'  => 500,
+            ]);
+        }
+    }
 
 
     function manageResourcePerson()
@@ -114,7 +146,7 @@ public function addResourcePerson(Request $request)
         $getDivisionData = division::all();
         $getVillageData = village::all();
         $getQualification = Qualification::all();
-        return view('pages.permission.resourceperson.manage_resource_person_per', [ 'getQualification' => $getQualification, 'getVillageData' => $getVillageData, 'getDivisionData' => $getDivisionData, 'getResourcePerson' => $getResourcePerson, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'getloanMainCatData' => $getloanMainCatData, 'getLoanSubCatData' => $getLoanSubCatData]);
+        return view('pages.permission.resourceperson.manage_resource_person_per', ['getQualification' => $getQualification, 'getVillageData' => $getVillageData, 'getDivisionData' => $getDivisionData, 'getResourcePerson' => $getResourcePerson, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'getloanMainCatData' => $getloanMainCatData, 'getLoanSubCatData' => $getLoanSubCatData]);
     }
 
     function create_resource()
@@ -129,7 +161,7 @@ public function addResourcePerson(Request $request)
         return view('pages.permission.resourceperson.create_resource_per', ['getQualification' => $getQualification, 'getDivision' => $getDivision, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'getloanMainCatData' => $getloanMainCatData, 'getLoanSubCatData' => $getLoanSubCatData]);
     }
 
-            function getSubQualificaton(Request $request)
+    function getSubQualificaton(Request $request)
     {
         try {
             // Check CSRF token

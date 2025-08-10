@@ -22,7 +22,10 @@ return new class extends Migration {
             $table->integer('division_id')->nullable();
             $table->integer('village_id')->nullable();
             $table->integer('small_group_id')->nullable();
-            $table->longText('memberData')->nullable();
+            $table->longText('member_data')->nullable();
+            $table->longText('group_meeting_data')->nullable();
+            $table->longText('village_meeting_data')->nullable();
+            $table->longText('awarness_meeting_data')->nullable();
 
             $table->timestamps();
 

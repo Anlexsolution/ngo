@@ -14,7 +14,7 @@
                     </div>
 
                     <div class="card-body px-4 py-4">
-                        <!-- Section: Meeting Info -->
+                        <!-- Meeting Info -->
                         <h5 class="text-primary fw-bold border-bottom pb-2 mb-4">Meeting Information</h5>
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
@@ -36,9 +36,19 @@
                                 </p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Time:</label>
+                                <label class="form-label fw-bold">Start Time:</label>
                                 <p class="form-control-plaintext border p-2 bg-light rounded">
-                                    {{ \Carbon\Carbon::parse($meetingData->meeting_time)->format('h:i A') }}
+                                    {{ \Carbon\Carbon::parse($meetingData->meeting_start_time ?? $meetingData->meeting_time)->format('h:i A') }}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">End Time:</label>
+                                <p class="form-control-plaintext border p-2 bg-light rounded">
+                                    @if (!empty($meetingData->meeting_end_time))
+                                        {{ \Carbon\Carbon::parse($meetingData->meeting_end_time)->format('h:i A') }}
+                                    @else
+                                        N/A
+                                    @endif
                                 </p>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -61,7 +71,55 @@
                             </div>
                         </div>
 
-                        <!-- Section: Member Attendance Table -->
+                        @php
+                            $meetingType = strtolower($meetingData->meeting_type ?? '');
+                        @endphp
+
+                        @if ($meetingType === 'group meeting' && $meetingData->group_meeting_data)
+                            <h5 class="text-success fw-bold border-bottom pb-2 mb-3">Group Meeting Details</h5>
+                            @php
+                                $groupData = json_decode($meetingData->group_meeting_data, true);
+                            @endphp
+                            <ul class="list-group mb-4">
+                                @foreach ($groupData as $key => $value)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}</strong>
+                                        <span>{{ $value ?: 'N/A' }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @elseif ($meetingType === 'village meeting' && $meetingData->village_meeting_data)
+                            <h5 class="text-info fw-bold border-bottom pb-2 mb-3">Village Meeting Details</h5>
+                            @php
+                                $villageData = json_decode($meetingData->village_meeting_data, true);
+                            @endphp
+                            <ul class="list-group mb-4">
+                                @foreach ($villageData as $key => $value)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}</strong>
+                                        <span>{{ $value ?: 'N/A' }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @elseif (
+                            ($meetingType === 'awareness meeting' || $meetingType === 'awarness meeting') &&
+                                $meetingData->awarness_meeting_data)
+                            <h5 class="text-warning fw-bold border-bottom pb-2 mb-3">Awareness Meeting Details</h5>
+                            @php
+                                $awarnessData = json_decode($meetingData->awarness_meeting_data, true);
+                            @endphp
+                            <ul class="list-group mb-4">
+                                @foreach ($awarnessData as $key => $value)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>{{ ucwords(str_replace('_', ' ', $key)) }}</strong>
+                                        <span>{{ $value ?: 'N/A' }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p>No additional meeting details available.</p>
+                        @endif
+
                         <hr class="mt-4 mb-4">
                         <h5 class="text-primary fw-bold border-bottom pb-2 mb-3">Member Attendance</h5>
 
@@ -97,10 +155,10 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div> <!-- .table-responsive -->
-                    </div> <!-- .card-body -->
-                </div> <!-- .card -->
-            </div> <!-- .col -->
-        </div> <!-- .row -->
-    </div> <!-- .container -->
-</div> <!-- .content-wrapper -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

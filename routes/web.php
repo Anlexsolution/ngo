@@ -337,6 +337,7 @@ Route::get('/manage_resource_person', [resource_person_controller::class, 'manag
 Route::get('/create_resource', [resource_person_controller::class, 'create_resource'])->middleware('auth');
 Route::post('/get-sub-qualification-data', [resource_person_controller::class, 'getSubQualificaton'])->middleware('auth');
 Route::post('/add-resource-person', [resource_person_controller::class, 'addResourcePerson'])->middleware('auth');
+Route::post('/get-resource-person-data', [resource_person_controller::class, 'getResourcePersonData'])->middleware('auth');
 ///Resourcde Person
 
 //Member Login
