@@ -610,6 +610,37 @@
         @endif
         <!-- Meetings end -->
 
+        <!-- resource person end -->
+        @if ($userType == 'superAdmin')
+            <li class="menu-item">
+                <a href="/manage_resource_person" class="menu-link">
+                    <i class="menu-icon ti ti-user-circle"></i>
+                    <div data-i18n="resource person others">resource person others</div>
+                </a>
+            </li>
+        @else
+            @php
+                $userRolesArray = $getUserRole->pluck('roleName')->toArray();
+            @endphp
+
+            @if (in_array($userType, $userRolesArray))
+                @php
+                    $usersDataPer = $permissions;
+                    $usersDataPer = json_decode($usersDataPer, true);
+                @endphp
+
+                @if (in_array('resourcePerson', $usersDataPer))
+                    <li class="menu-item">
+                        <a href="/manage_resource_person" class="menu-link">
+                            <i class="menu-icon ti ti-user-circle"></i>
+                            <div data-i18n="resource person others">resource person others</div>
+                        </a>
+                    </li>
+                @endif
+            @endif
+        @endif
+        <!-- resource person end -->
+
         <!-- Reports start -->
         @if ($userType == 'superAdmin')
             <li class="menu-item">

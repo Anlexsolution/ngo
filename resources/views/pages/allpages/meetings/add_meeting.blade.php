@@ -12,42 +12,6 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-6 mt-3">
                                 <div class="form-group">
-                                    <label>Meeting Title</label>
-                                    <input type="text" class="form-control" id="txtMeetingTitle">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
-                                <div class="form-group">
-                                    <label>Meeting Date</label>
-                                    <input type="date" class="form-control" id="txtMeetingDate">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
-                                <div class="form-group">
-                                    <label>Meeting Time</label>
-                                    <input type="time" class="form-control" id="txtMeetingTime">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
-                                <div class="form-group">
-                                    <label>Resource Person</label>
-                                    <input type="text" class="form-control" id="txtResourcePerson">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
-                                <div class="form-group">
-                                    <label>Resource Position</label>
-                                   <input type="text" class="form-control" id="txtResourcePosition">
-                                </div>
-                            </div>
-                                  <div class="col-sm-12 col-md-6 mt-3">
-                                <div class="form-group">
-                                    <label>Resource Contact No</label>
-                                    <input type="number" class="form-control" id="txtResourceContactNo">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 mt-3">
-                                <div class="form-group">
                                     <label>Meeting Type</label>
                                     <select class="selectize" id="txtMeetingType">
                                         <option value="">---select---</option>
@@ -58,7 +22,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 mt-3 d-none" id="btnShowDivision">
+                                             <div class="col-sm-12 col-md-6 mt-3 d-none" id="btnShowDivision">
                                 <div class="form-group">
                                     <label>Division</label>
                                     <select id="txtDivision">
@@ -83,6 +47,50 @@
                                     </select>
                                 </div>
                             </div>
+                            <hr class="mt-3">
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="form-group">
+                                    <label>Meeting Title</label>
+                                    <input type="text" class="form-control" id="txtMeetingTitle">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="form-group">
+                                    <label>Meeting Date</label>
+                                    <input type="date" class="form-control" id="txtMeetingDate">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="form-group">
+                                    <label>Meeting Time</label>
+                                    <input type="time" class="form-control" id="txtMeetingTime">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="form-group">
+                                    <label>Resource Person</label>
+                                     <select class="selectize" id="txtResourcePerson">
+                                        <option value="">---Select---</option>
+                                        @foreach ($getAllResourcePerson as $person)
+                                        <option value="{{ $person->id }}">{{ $person->full_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="form-group">
+                                    <label>Resource Position</label>
+                                    <input type="text" class="form-control" id="txtResourcePosition">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="form-group">
+                                    <label>Resource Contact No</label>
+                                    <input type="number" class="form-control" id="txtResourceContactNo">
+                                </div>
+                            </div>
+
+
                             <hr class="mt-5">
                             <table class="table table-striped" id="showMember">
                                 <thead>
@@ -91,7 +99,7 @@
                                         <th>Member Name</th>
                                         <th>NIC</th>
                                         <th>Old Account Number</th>
-                                        <th>Absent</th>
+                                        <th>Attendance</th>
                                         <th>Remarks</th>
                                     </tr>
                                 </thead>

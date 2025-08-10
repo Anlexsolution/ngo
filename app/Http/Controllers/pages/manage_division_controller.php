@@ -92,6 +92,36 @@ class manage_division_controller extends Controller
         }
     }
 
+        function getVillageDataResource(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $divisionId = $request->input('divisionId');
+            $getVillageData = DB::table('villages')->where('divisionId', $divisionId)->get();
+            $villageOption = '<option value="">Select Village</option>';
+            foreach ($getVillageData as $villageData) {
+                $villageOption .= '<option value="' . $villageData->id . '">' . $villageData->villageName . '</option>';
+            }
+
+            return response()->json(['villageOption' => $villageOption, 'code' => 200]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
     function updateSmallGroupDetails(Request $request)
     {
         try {

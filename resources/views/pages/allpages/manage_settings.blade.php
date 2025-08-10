@@ -143,6 +143,22 @@
                     </div>
                 </a>
             </div>
+                  <div class="col-sm-12 col-md-4 mt-3">
+                <a href="/manage_qualification_settings">
+                    <div class="card shadow bg-info">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-2  mt-4">
+                                    <i class="ti ti-briefcase-2 text-lights" style="font-size: 30px"></i>
+                                </div>
+                                <div class="col-10  text-uppercase  mt-4">
+                                    <h5 class="text-lights">Qualification Settings</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
             {{--
             <div class="col-sm-12 col-md-4">
                 <a href="/manage_activitylog">

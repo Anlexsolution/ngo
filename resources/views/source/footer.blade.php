@@ -404,6 +404,12 @@ pages-custom-js/create_loan_request.js?v=<?= date('His') ?>"></script>
 @if ($pageName == 'add_meeting')
 <script src="../../pages-custom-js/manage_meetings.js?v=<?= date('His') ?>"></script> @endif
 
+@if ($pageName == 'manage_qualification_settings')
+<script src="../../pages-custom-js/qualification_settings.js?v=<?= date('His') ?>"></script> @endif
+
+@if ($pageName == 'create_resource')
+<script src="../../pages-custom-js/resource_settings.js?v=<?= date('His') ?>"></script> @endif
+
 @if ($pageName == 'collection_transfer')
 <script src="../../pages-custom-js/collection_transfer.js?v=<?= date('His') ?>"></script> @endif
 

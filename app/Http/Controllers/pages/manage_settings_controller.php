@@ -18,8 +18,10 @@ use App\Models\meetingcategory;
 use App\Models\meetingtype;
 use App\Models\member;
 use App\Models\profession;
+use App\Models\Qualification;
 use App\Models\relative;
 use App\Models\subprofession;
+use App\Models\SUbqualification;
 use App\Models\systemactivitylog;
 use App\Models\userRole;
 use App\Models\Users;
@@ -31,6 +33,120 @@ use Illuminate\Support\Facades\Session;
 
 class manage_settings_controller extends Controller
 {
+
+    function addSubQualificationData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtSubQualificationName = $request->input('txtSubQualificationName');
+            $txtQualificationId = $request->input('txtQualificationId');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Created new sub qualification: ' . $txtSubQualificationName;
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $table = 's_ubqualifications';
+            $data = [
+                'qualificationId' => $txtQualificationId,
+                'subQualificationName' => $txtSubQualificationName
+            ];
+            $result = InsertHelper::insertRecord($table, $data);
+            if ($result === true) {
+                return response()->json(['success' => 'Create sub Qualification successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+    function addQualificationData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtQualificationName = $request->input('txtQualificationName');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Created new qualification: ' . $txtQualificationName;
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $table = 'qualifications';
+            $data = [
+                'qualificationName' => $txtQualificationName
+            ];
+            $result = InsertHelper::insertRecord($table, $data);
+            if ($result === true) {
+                return response()->json(['success' => 'Create Qualification successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+    function manage_qualification_settings()
+    {
+        $getUserRole = userRole::all();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getloanMainCatData = loanpurpose::all();
+        $getLoanSubCatData = loanpurposesub::all();
+        $getQualificationData = Qualification::all();
+        $getSubQualification = SUbqualification::all();
+        return view('pages.permission.settings.manage_qualification_settings_per', [ 'getSubQualification' => $getSubQualification, 'getQualificationData' => $getQualificationData, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'getloanMainCatData' => $getloanMainCatData, 'getLoanSubCatData' => $getLoanSubCatData]);
+    }
 
 
     function loanDocumentSettings()
@@ -159,7 +275,7 @@ class manage_settings_controller extends Controller
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
         $getAllSubProfession = subprofession::all();
-        return view('pages.permission.settings.manage_profession_per', [ 'getAllSubProfession' => $getAllSubProfession, 'managePro' => $managePro, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.permission.settings.manage_profession_per', ['getAllSubProfession' => $getAllSubProfession, 'managePro' => $managePro, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function meetingCategory()
@@ -299,7 +415,7 @@ class manage_settings_controller extends Controller
         }
     }
 
-        function addSubProfession(Request $request)
+    function addSubProfession(Request $request)
     {
         try {
             // Check CSRF token

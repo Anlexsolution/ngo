@@ -11,6 +11,7 @@ use App\Models\loan;
 use App\Models\loanproduct;
 use App\Models\Meeting;
 use App\Models\profession;
+use App\Models\Resourceperson;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -27,7 +28,8 @@ class manage_meeting_controller extends Controller
         $getMember = member::with('division', 'village', 'smallgroup')->get();
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
-        return view('pages.permission.meetings.add_meeting_per', ['getUserRole' => $getUserRole, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        $getAllResourcePerson = Resourceperson::all();
+        return view('pages.permission.meetings.add_meeting_per', [ 'getAllResourcePerson' => $getAllResourcePerson, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function manage_meetings()

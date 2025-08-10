@@ -85,7 +85,14 @@ function makeAjaxRequestDiv(formData) {
                                 fullName,
                                 member.nicNumber,
                                 member.oldAccountNumber,
-                                `<input type="checkbox" class="absent-checkbox" data-id="${member.id}">`,
+                                `<td>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="1" data-id="${member.id}" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
+                                    </label>
+                                    </td>`,
                                 `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`
                             ]);
                         });
@@ -104,7 +111,15 @@ function makeAjaxRequestDiv(formData) {
                                     <td>${fullName}</td>
                                     <td>${member.nicNumber}</td>
                                     <td>${member.oldAccountNumber}</td>
-                                    <td><input type="checkbox" class="absent-checkbox" data-id="${member.id}"></td>
+                                  <td>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="1" data-id="${member.id}" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
+                                    </label>
+                                    </td>
+
                                     <td><textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea></td>
                                 </tr>
                             `);
@@ -229,7 +244,14 @@ function makeAjaxRequestSmall(formData) {
                                 fullName,
                                 member.nicNumber,
                                 member.oldAccountNumber,
-                                `<input type="checkbox" class="absent-checkbox" data-id="${member.id}">`,
+                                `<td>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="1" data-id="${member.id}" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
+                                    </label>
+                                    </td>`,
                                 `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`
                             ]);
                         });
@@ -248,7 +270,14 @@ function makeAjaxRequestSmall(formData) {
                                     <td>${fullName}</td>
                                     <td>${member.nicNumber}</td>
                                     <td>${member.oldAccountNumber}</td>
-                                    <td><input type="checkbox" class="absent-checkbox" data-id="${member.id}"></td>
+                                  <td>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="1" data-id="${member.id}" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
+                                    </label>
+                                    </td>
                                     <td><textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea></td>
                                 </tr>
                             `);
@@ -344,7 +373,14 @@ function makeAjaxRequestSmallGroupData(formData) {
                                 fullName,
                                 member.nicNumber,
                                 member.oldAccountNumber,
-                                `<input type="checkbox" class="absent-checkbox" data-id="${member.id}">`,
+                                `<td>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="1" data-id="${member.id}" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
+                                    </label>
+                                    </td>`,
                                 `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`
                             ]);
                         });
@@ -363,7 +399,14 @@ function makeAjaxRequestSmallGroupData(formData) {
                                     <td>${fullName}</td>
                                     <td>${member.nicNumber}</td>
                                     <td>${member.oldAccountNumber}</td>
-                                    <td><input type="checkbox" class="absent-checkbox" data-id="${member.id}"></td>
+                               <td>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="1" data-id="${member.id}" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
+                                    </label>
+                                    </td>
                                     <td><textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea></td>
                                 </tr>
                             `);

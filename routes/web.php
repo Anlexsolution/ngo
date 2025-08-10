@@ -29,6 +29,7 @@ use App\Http\Controllers\pages\opening_balance_controller;
 use App\Http\Controllers\pages\receipt_controller;
 use App\Http\Controllers\pages\withdrawal_controller;
 use App\Http\Controllers\pages\profile_controller;
+use App\Http\Controllers\pages\resource_person_controller;
 
 //Main route
 Route::get('/', [logincontroller::class, 'loginpage'])->middleware('guest');
@@ -109,6 +110,7 @@ Route::post('/update-village-details', [manage_division_controller::class, 'upda
 Route::post('/update-smallgroup-details', [manage_division_controller::class, 'updateSmallGroupDetails'])->middleware('auth');
 
 Route::post('/get-village-data', [manage_division_controller::class, 'getVillageData'])->middleware('auth');
+Route::post('/get-village-data-resource', [manage_division_controller::class, 'getVillageDataResource'])->middleware('auth');
 Route::post('/get-small-group-data', [manage_division_controller::class, 'getSmallGroupData'])->middleware('auth');
 //manage division
 
@@ -312,6 +314,9 @@ Route::post('/delete-profession-data', [manage_settings_controller::class, 'dele
 Route::post('/update-account-details', [manage_settings_controller::class, 'updateAccountDetails'])->middleware('auth');
 Route::post('/add-interest-settings-data', [manage_settings_controller::class, 'interestSettingData'])->middleware('auth');
 Route::post('/add-loan-document-data', [manage_settings_controller::class, 'loanDocData'])->middleware('auth');
+Route::get('/manage_qualification_settings', [manage_settings_controller::class, 'manage_qualification_settings'])->middleware('auth');
+Route::post('/add-qualification-data', [manage_settings_controller::class, 'addQualificationData'])->middleware('auth');
+Route::post('/add-sub-qualification-data', [manage_settings_controller::class, 'addSubQualificationData'])->middleware('auth');
 //Manage Settings
 
 //manage reports
@@ -327,6 +332,13 @@ Route::get('/member_savings_report', [manage_reports_controller::class, 'memberS
 Route::get('/view_member_saving_report/{id}', [manage_reports_controller::class, 'viewMemberSavingReport'])->middleware('auth')->name('view_member_saving_report');
 //manage reports
 
+///Resourcde Person
+Route::get('/manage_resource_person', [resource_person_controller::class, 'manageResourcePerson'])->middleware('auth');
+Route::get('/create_resource', [resource_person_controller::class, 'create_resource'])->middleware('auth');
+Route::post('/get-sub-qualification-data', [resource_person_controller::class, 'getSubQualificaton'])->middleware('auth');
+Route::post('/add-resource-person', [resource_person_controller::class, 'addResourcePerson'])->middleware('auth');
+///Resourcde Person
+
 //Member Login
 //Member Login
 
@@ -339,6 +351,7 @@ Route::post('/get-meeting-village-data', [manage_meeting_controller::class, 'get
 Route::post('/get-meeting-smallgroup-data', [manage_meeting_controller::class, 'getMeetingSmallgroupData'])->middleware('auth');
 Route::post('/get-meeting-smallgroup-data-table', [manage_meeting_controller::class, 'getMeetingSmallgroupDataTable'])->middleware('auth');
 Route::post('/create-meeting', [manage_meeting_controller::class, 'createMeeting'])->middleware('auth');
+
 //Manage Meetings
 
 Route::get('/error401', [error_controller::class, 'error401']);
