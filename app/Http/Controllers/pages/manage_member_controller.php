@@ -15,6 +15,7 @@ use App\Models\loanproduct;
 use App\Models\loanpurpose;
 use App\Models\loanrepayment;
 use App\Models\loanschedule;
+use App\Models\Meeting;
 use App\Models\memberdocument;
 use App\Models\profession;
 use App\Models\saving;
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\DB;
 class manage_member_controller extends Controller
 {
 
-        public function viewDeathHisMem($id)
+    public function viewDeathHisMem($id)
     {
         $decId = decrypt($id);
         $getUser = User::all();
@@ -47,7 +48,7 @@ class manage_member_controller extends Controller
         return view('pages.permission.memberlogin.view_death_history_mem_per', ['memberId' => $memberId, 'getUser' => $getUser, 'getUserRole' => $getUserRole, 'getDeathHistory' => $getDeathHistory, 'getMember' => $getMember, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
-        function viewLoanDetailsMem($id)
+    function viewLoanDetailsMem($id)
     {
         $decId = Crypt::decrypt($id);
         $loanDetails = loan::find($decId);
@@ -68,7 +69,7 @@ class manage_member_controller extends Controller
         return view('pages.permission.memberlogin.view_loan_details_mem_per', ['getRepaymentDetails' => $getRepaymentDetails, 'getAllUser' => $getAllUser, 'getLoanApproval' => $getLoanApproval, 'getLoanOfficer' => $getLoanOfficer, 'getMember' => $getMember, 'loanDetails' => $loanDetails, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'getScheduleData' => $getScheduleData]);
     }
 
-        public function viewSavHisMem($id)
+    public function viewSavHisMem($id)
     {
         $decId = decrypt($id);
         $getUserRole = userRole::all();
@@ -126,7 +127,7 @@ class manage_member_controller extends Controller
         $getMemberId = $getMemberData->uniqueId;
 
         $savingData = DB::table('savings')->where('memberId', $getMemberId)->first();
-        if($savingData) {
+        if ($savingData) {
             $totalSavAM = $savingData->totalAmount;
             $totalSavAM = number_format($totalSavAM, 2);
         } else {
@@ -134,7 +135,7 @@ class manage_member_controller extends Controller
         }
 
         $deathData = DB::table('deathsubscriptions')->where('memberId', $getMemberId)->first();
-        if($deathData) {
+        if ($deathData) {
             $totalDeathAM = $deathData->totalAmount;
             $totalDeathAM = number_format($totalDeathAM, 2);
         } else {
@@ -142,7 +143,7 @@ class manage_member_controller extends Controller
         }
 
         $otherData = DB::table('otherincomes')->where('memberId', $getMemberId)->first();
-        if($otherData) {
+        if ($otherData) {
             $totalOtherAM = $otherData->totalAmount;
             $totalOtherAM = number_format($totalOtherAM, 2);
         } else {
@@ -185,7 +186,42 @@ class manage_member_controller extends Controller
         $getSubPro = subprofession::all();
         $getAllUser = User::all();
 
-        return view('pages.view_member_per', [ 'getFinalGur' => $getFinalGur, 'getAllUser' => $getAllUser, 'getSubPro' => $getSubPro, 'getPro' => $getPro, 'gndivisionSmallgroup' => $gndivisionSmallgroup, 'getGnDivision' => $getGnDivision, 'getRepaymentData' => $getRepaymentData, 'getDataActive' => $getDataActive, 'getLoanScheduleData' => $getLoanScheduleData, 'getLoanPurpose' => $getLoanPurpose, 'getGurDetails' => $getGurDetails, 'totalOtherAM' => $totalOtherAM, 'totalDeathAM' => $totalDeathAM, 'totalSavAM' => $totalSavAM, 'finalArreas' => $finalArreas, 'finalTotalLoanAM' => $finalTotalLoanAM, 'getMemberData' => $getMemberData, 'memberId' => $memberId, 'getproduct' => $getproduct, 'getData' => $getData, 'getMemberNotes' => $getMemberNotes, 'getMemberDocument' => $getMemberDocument, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'member' => $member, 'getSavings' => $getSavings, 'getDeath' => $getDeath, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        $rows = Meeting::whereRaw(
+            'JSON_CONTAINS(member_data, ?)',
+            [json_encode(['memberId' => (int) $memberId])]
+        )->get();
+
+        $presentMembers = collect();
+        $absentMembers  = collect();
+
+        $meetings = $rows->map(function ($meeting) use (&$presentMembers, &$absentMembers) {
+            $meeting->member_data = collect(json_decode($meeting->member_data, true));
+            $meeting->present = $meeting->member_data->where('isAbsent', 0);
+            $meeting->absent  = $meeting->member_data->where('isAbsent', 1);
+
+            foreach ($meeting->present as $m) {
+                $presentMembers->push([
+                    'meeting_title' => $meeting->meeting_title,
+                    'meeting_date'  => $meeting->meeting_date,
+                    'meeting_time'  => $meeting->meeting_time,
+                    'meeting_end_time' => $meeting->meeting_end_time,
+                    'remarks'       => $m['remarks']
+                ]);
+            }
+
+            foreach ($meeting->absent as $m) {
+                $absentMembers->push([
+                    'meeting_title' => $meeting->meeting_title,
+                    'meeting_date'  => $meeting->meeting_date,
+                    'meeting_time'  => $meeting->meeting_time,
+                    'meeting_end_time' => $meeting->meeting_end_time,
+                    'remarks'       => $m['remarks']
+                ]);
+            }
+
+            return $meeting;
+        });
+        return view('pages.view_member_per', ['absentMembers' => $absentMembers, 'presentMembers' => $presentMembers, 'meetings' => $meetings, 'getFinalGur' => $getFinalGur, 'getAllUser' => $getAllUser, 'getSubPro' => $getSubPro, 'getPro' => $getPro, 'gndivisionSmallgroup' => $gndivisionSmallgroup, 'getGnDivision' => $getGnDivision, 'getRepaymentData' => $getRepaymentData, 'getDataActive' => $getDataActive, 'getLoanScheduleData' => $getLoanScheduleData, 'getLoanPurpose' => $getLoanPurpose, 'getGurDetails' => $getGurDetails, 'totalOtherAM' => $totalOtherAM, 'totalDeathAM' => $totalDeathAM, 'totalSavAM' => $totalSavAM, 'finalArreas' => $finalArreas, 'finalTotalLoanAM' => $finalTotalLoanAM, 'getMemberData' => $getMemberData, 'memberId' => $memberId, 'getproduct' => $getproduct, 'getData' => $getData, 'getMemberNotes' => $getMemberNotes, 'getMemberDocument' => $getMemberDocument, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'member' => $member, 'getSavings' => $getSavings, 'getDeath' => $getDeath, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function showMember($id)
@@ -212,7 +248,7 @@ class manage_member_controller extends Controller
         $getMemberId = $getMemberData->uniqueId;
 
         $savingData = DB::table('savings')->where('memberId', $getMemberId)->first();
-        if($savingData) {
+        if ($savingData) {
             $totalSavAM = $savingData->totalAmount;
             $totalSavAM = number_format($totalSavAM, 2);
         } else {
@@ -220,7 +256,7 @@ class manage_member_controller extends Controller
         }
 
         $deathData = DB::table('deathsubscriptions')->where('memberId', $getMemberId)->first();
-        if($deathData) {
+        if ($deathData) {
             $totalDeathAM = $deathData->totalAmount;
             $totalDeathAM = number_format($totalDeathAM, 2);
         } else {
@@ -228,7 +264,7 @@ class manage_member_controller extends Controller
         }
 
         $otherData = DB::table('otherincomes')->where('memberId', $getMemberId)->first();
-        if($otherData) {
+        if ($otherData) {
             $totalOtherAM = $otherData->totalAmount;
             $totalOtherAM = number_format($totalOtherAM, 2);
         } else {
@@ -271,7 +307,7 @@ class manage_member_controller extends Controller
         $getSubPro = subprofession::all();
         $getAllUser = User::all();
 
-        return view('pages.permission.memberlogin.show_member_per', [ 'getFinalGur' => $getFinalGur, 'getAllUser' => $getAllUser, 'getSubPro' => $getSubPro, 'getPro' => $getPro, 'gndivisionSmallgroup' => $gndivisionSmallgroup, 'getGnDivision' => $getGnDivision, 'getRepaymentData' => $getRepaymentData, 'getDataActive' => $getDataActive, 'getLoanScheduleData' => $getLoanScheduleData, 'getLoanPurpose' => $getLoanPurpose, 'getGurDetails' => $getGurDetails, 'totalOtherAM' => $totalOtherAM, 'totalDeathAM' => $totalDeathAM, 'totalSavAM' => $totalSavAM, 'finalArreas' => $finalArreas, 'finalTotalLoanAM' => $finalTotalLoanAM, 'getMemberData' => $getMemberData, 'memberId' => $memberId, 'getproduct' => $getproduct, 'getData' => $getData, 'getMemberNotes' => $getMemberNotes, 'getMemberDocument' => $getMemberDocument, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'member' => $member, 'getSavings' => $getSavings, 'getDeath' => $getDeath, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.permission.memberlogin.show_member_per', ['getFinalGur' => $getFinalGur, 'getAllUser' => $getAllUser, 'getSubPro' => $getSubPro, 'getPro' => $getPro, 'gndivisionSmallgroup' => $gndivisionSmallgroup, 'getGnDivision' => $getGnDivision, 'getRepaymentData' => $getRepaymentData, 'getDataActive' => $getDataActive, 'getLoanScheduleData' => $getLoanScheduleData, 'getLoanPurpose' => $getLoanPurpose, 'getGurDetails' => $getGurDetails, 'totalOtherAM' => $totalOtherAM, 'totalDeathAM' => $totalDeathAM, 'totalSavAM' => $totalSavAM, 'finalArreas' => $finalArreas, 'finalTotalLoanAM' => $finalTotalLoanAM, 'getMemberData' => $getMemberData, 'memberId' => $memberId, 'getproduct' => $getproduct, 'getData' => $getData, 'getMemberNotes' => $getMemberNotes, 'getMemberDocument' => $getMemberDocument, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'member' => $member, 'getSavings' => $getSavings, 'getDeath' => $getDeath, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function updateMember($id)
