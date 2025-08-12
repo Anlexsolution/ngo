@@ -187,40 +187,46 @@ class manage_member_controller extends Controller
         $getAllUser = User::all();
 
         $rows = Meeting::whereRaw(
-            'JSON_CONTAINS(member_data, ?)',
-            [json_encode(['memberId' => (int) $memberId])]
-        )->get();
+    'JSON_CONTAINS(member_data, ?)',
+    [json_encode(['memberId' => (int) $memberId])]
+)->get();
 
-        $presentMembers = collect();
-        $absentMembers  = collect();
+$presentMembers = collect();
+$absentMembers  = collect();
 
-        $meetings = $rows->map(function ($meeting) use (&$presentMembers, &$absentMembers) {
-            $meeting->member_data = collect(json_decode($meeting->member_data, true));
-            $meeting->present = $meeting->member_data->where('isAbsent', 0);
-            $meeting->absent  = $meeting->member_data->where('isAbsent', 1);
+foreach ($rows as $meeting) {
+    $members = collect(json_decode($meeting->member_data, true));
+    $memberRecord = $members->firstWhere('memberId', (int) $memberId);
 
-            foreach ($meeting->present as $m) {
-                $presentMembers->push([
-                    'meeting_title' => $meeting->meeting_title,
-                    'meeting_date'  => $meeting->meeting_date,
-                    'meeting_time'  => $meeting->meeting_time,
-                    'meeting_end_time' => $meeting->meeting_end_time,
-                    'remarks'       => $m['remarks']
-                ]);
-            }
+    if (! $memberRecord) {
+        continue; // should never happen, but safe
+    }
 
-            foreach ($meeting->absent as $m) {
-                $absentMembers->push([
-                    'meeting_title' => $meeting->meeting_title,
-                    'meeting_date'  => $meeting->meeting_date,
-                    'meeting_time'  => $meeting->meeting_time,
-                    'meeting_end_time' => $meeting->meeting_end_time,
-                    'remarks'       => $m['remarks']
-                ]);
-            }
+    // Fetch resource person name from ID
+    $resourcePersonName = DB::table('resourcepeople')
+        ->where('id', $meeting->resource_person)
+        ->value('full_name');
 
-            return $meeting;
-        });
+    $meetingInfo = [
+        'meeting_title'    => $meeting->meeting_title,
+        'meeting_date'     => $meeting->meeting_date,
+        'meeting_time'     => $meeting->meeting_time,
+        'meeting_end_time' => $meeting->meeting_end_time,
+        'meeting_type'     => $meeting->meeting_type,
+        'resource_person'  => $resourcePersonName ?? 'N/A', // fallback if not found
+    ];
+
+    if (isset($memberRecord['isAbsent']) && $memberRecord['isAbsent'] == 0) {
+        $presentMembers->push($meetingInfo);
+    } else {
+        $absentMembers->push($meetingInfo);
+    }
+}
+
+// Keep original rows if needed for view
+$meetings = $rows;
+
+        
         return view('pages.view_member_per', ['absentMembers' => $absentMembers, 'presentMembers' => $presentMembers, 'meetings' => $meetings, 'getFinalGur' => $getFinalGur, 'getAllUser' => $getAllUser, 'getSubPro' => $getSubPro, 'getPro' => $getPro, 'gndivisionSmallgroup' => $gndivisionSmallgroup, 'getGnDivision' => $getGnDivision, 'getRepaymentData' => $getRepaymentData, 'getDataActive' => $getDataActive, 'getLoanScheduleData' => $getLoanScheduleData, 'getLoanPurpose' => $getLoanPurpose, 'getGurDetails' => $getGurDetails, 'totalOtherAM' => $totalOtherAM, 'totalDeathAM' => $totalDeathAM, 'totalSavAM' => $totalSavAM, 'finalArreas' => $finalArreas, 'finalTotalLoanAM' => $finalTotalLoanAM, 'getMemberData' => $getMemberData, 'memberId' => $memberId, 'getproduct' => $getproduct, 'getData' => $getData, 'getMemberNotes' => $getMemberNotes, 'getMemberDocument' => $getMemberDocument, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'member' => $member, 'getSavings' => $getSavings, 'getDeath' => $getDeath, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
