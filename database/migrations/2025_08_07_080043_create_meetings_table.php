@@ -26,6 +26,8 @@ return new class extends Migration {
             $table->longText('group_meeting_data')->nullable();
             $table->longText('village_meeting_data')->nullable();
             $table->longText('awarness_meeting_data')->nullable();
+            $table->string('foAttendance')->nullable();
+            $table->string('dmAttendance')->nullable();
 
             $table->timestamps();
 

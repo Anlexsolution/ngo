@@ -96,6 +96,28 @@
                                     <input type="number" class="form-control" id="txtResourceContactNo">
                                 </div>
                             </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <label>FO Attendance Meeting?</label>
+                                <div>
+                                    <label class="me-3">
+                                        <input type="radio" name="foAttendanceMeeting" value="yes" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="foAttendanceMeeting" value="no"> No
+                                    </label>
+                                </div>
+                            </div>
+                              <div class="col-sm-12 col-md-6 mt-3">
+                                <label>DM Attendance Meeting?</label>
+                                <div>
+                                    <label class="me-3">
+                                        <input type="radio" name="dmAttendanceMeeting" value="yes" checked> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="dmAttendanceMeeting" value="no"> No
+                                    </label>
+                                </div>
+                            </div>
                             <hr class="mt-5">
 
                             <div id="txtGroupMeetingQustions" class="row d-none">
@@ -104,32 +126,49 @@
                                 </div>
 
                                 <div class="col-sm-12 col-md-6 mt-3">
-                                    <label for="">The Level of the team leaders ability to contasct
-                                        meeting</label>
-                                    <select class="selectize" id="txtTeamLeadersAbility">
-                                        <option value="">---Select---</option>
-                                        <option value="Very Good">Very Good</option>
-                                        <option value="Good">Good</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Less/Low">Less/Low</option>
-                                    </select>
+                                    <label>communique has been read?</label>
+                                    <div>
+                                        <label class="me-3">
+                                            <input type="radio" name="communiqueReadGroup" value="yes" checked> Yes
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="communiqueReadGroup" value="no"> No
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-12 col-md-6 mt-3">
-                                    <label for="">Account Statement</label>
-                                    <input type="text" class="form-control" id="txtAccountStatement">
+                                    <label>account statement has been read?</label>
+                                    <div>
+                                        <label class="me-3">
+                                            <input type="radio" name="accountStatementReadGroup" value="yes" checked> Yes
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="accountStatementReadGroup" value="no"> No
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-12 col-md-6 mt-3">
-                                    <label for="">Activity Statement</label>
-                                    <input type="text" class="form-control" id="txtActivityStatement">
+                                    <label>Activity statement has been read?</label>
+                                    <div>
+                                        <label class="me-3">
+                                            <input type="radio" name="activityStatementReadGroup" value="yes" checked>
+                                            Yes
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="activityStatementReadGroup" value="no">
+                                            No
+                                        </label>
+                                    </div>
                                 </div>
+
                                 <div class="col-sm-12 col-md-6 mt-3">
                                     <label>Has a decision been made?</label>
                                     <div>
                                         <label class="me-3">
                                             <input type="radio" name="decision" value="yes"
-                                                onclick="updateReasonLabel('Please explain your decision')"> Yes
+                                                onclick="updateReasonLabel('Please explain your decision')" checked> Yes
                                         </label>
                                         <label>
                                             <input type="radio" name="decision" value="no"
@@ -142,25 +181,33 @@
                                     <label for="reason" id="reasonLabel">Reason</label>
                                     <textarea name="reason" class="form-control" rows="3" id="txtDecisionReson" placeholder="Enter reason here"></textarea>
                                 </div>
+
                                 <div class="col-sm-12 col-md-6 mt-3">
-                                    <label>Group Activity Explaination</label>
-                                    <textarea id="txtGroupActivity" class="form-control" rows="3"></textarea>
+                                    <label>Has a Group Activity Explaination?</label>
+                                    <div>
+                                        <label class="me-3">
+                                            <input type="radio" name="groupActivityDecesion" value="yes"
+                                                onclick="updateReasonLabelGroupActivity('Please explain your Group Activity')" checked>
+                                            Yes
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="groupActivityDecesion" value="no"
+                                                onclick="updateReasonLabelGroupActivity('Please explain why not')"> No
+                                        </label>
+                                    </div>
                                 </div>
+
+                                <div class="col-sm-12 col-md-6 mt-3" id="reasonContainerGRoupActivity">
+                                    <label for="reason" id="reasonLabelGroupActivity">Reason</label>
+                                    <textarea name="reason" class="form-control" rows="3" id="txtGroupActivity" placeholder="Enter reason here"></textarea>
+                                </div>
+
+
                                 <div class="col-sm-12 col-md-6 mt-3">
                                     <label>Reson for not doing team work</label>
                                     <textarea id="txtResonFOrNotDoingTeamWork" class="form-control" rows="3"></textarea>
                                 </div>
-                                <div class="col-sm-12 col-md-6 mt-3">
-                                    <label for="">
-                                        How interested is the member in the group meeting?</label>
-                                    <select class="selectize" id="txtMemberInterstingGroupMeeting">
-                                        <option value="">---Select---</option>
-                                        <option value="Very Good">Very Good</option>
-                                        <option value="Good">Good</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Less/Low">Less/Low</option>
-                                    </select>
-                                </div>
+
                                 <div class="col-sm-12 col-md-6 mt-3">
                                     <label>Effect For Team Work</label>
                                     <textarea id="txtEffectForTeamWork" class="form-control" rows="3"></textarea>
@@ -186,7 +233,7 @@
                                     <label>The meeting is start by branch manager ?</label>
                                     <div>
                                         <label class="me-3">
-                                            <input type="radio" name="meetingBranchManager" value="yes"> Yes
+                                            <input type="radio" name="meetingBranchManager" value="yes" checked> Yes
                                         </label>
                                         <label>
                                             <input type="radio" name="meetingBranchManager" value="no"> No
@@ -210,7 +257,7 @@
                                     <label>communique has been read?</label>
                                     <div>
                                         <label class="me-3">
-                                            <input type="radio" name="communiqueRead" value="yes"> Yes
+                                            <input type="radio" name="communiqueRead" value="yes" checked> Yes
                                         </label>
                                         <label>
                                             <input type="radio" name="communiqueRead" value="no"> No
@@ -222,7 +269,7 @@
                                     <label>account statement has been read?</label>
                                     <div>
                                         <label class="me-3">
-                                            <input type="radio" name="accountStatementRead" value="yes"> Yes
+                                            <input type="radio" name="accountStatementRead" value="yes" checked> Yes
                                         </label>
                                         <label>
                                             <input type="radio" name="accountStatementRead" value="no"> No
@@ -236,7 +283,7 @@
                                     <label>arrears has been discussed?</label>
                                     <div>
                                         <label class="me-3">
-                                            <input type="radio" name="arreasDiscuss" value="yes"> Yes
+                                            <input type="radio" name="arreasDiscuss" value="yes" checked> Yes
                                         </label>
                                         <label>
                                             <input type="radio" name="arreasDiscuss" value="no"> No
@@ -273,7 +320,7 @@
                                     <input type="text" class="form-control" id="txtAwarnessTrainingHeading">
                                 </div>
 
-                                 <div class="col-sm-12 col-md-6 mt-3">
+                                <div class="col-sm-12 col-md-6 mt-3">
                                     <label>number of participants</label>
                                     <input type="number" class="form-control" id="NumberOfParticipation">
                                 </div>
@@ -315,6 +362,7 @@
                                         <th>Old Account Number</th>
                                         <th>Attendance</th>
                                         <th>Remarks</th>
+                                        <th>status</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -333,5 +381,9 @@
 <script>
     function updateReasonLabel(text) {
         document.getElementById("reasonLabel").innerText = text;
+    }
+
+    function updateReasonLabelGroupActivity(text) {
+        document.getElementById("reasonLabelGroupActivity").innerText = text;
     }
 </script>

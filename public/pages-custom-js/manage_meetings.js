@@ -178,7 +178,13 @@ function makeAjaxRequestDiv(formData) {
                                         <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
                                     </label>
                                     </td>`,
-                                `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`
+                                `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`,
+                                `<select class="form-control performance-select selectize" data-id="${member.id}">
+                                    <option value="very good">Very Good</option>
+                                    <option value="good">Good</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>`
                             ]);
                         });
 
@@ -337,7 +343,13 @@ function makeAjaxRequestSmall(formData) {
                                         <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
                                     </label>
                                     </td>`,
-                                `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`
+                                `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`,
+                                `<select class="form-control performance-select selectize" data-id="${member.id}">
+                                    <option value="very good">Very Good</option>
+                                    <option value="good">Good</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>`
                             ]);
                         });
 
@@ -466,7 +478,13 @@ function makeAjaxRequestSmallGroupData(formData) {
                                         <input type="radio" name="absent_${member.id}" value="0" data-id="${member.id}" > No
                                     </label>
                                     </td>`,
-                                `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`
+                                `<textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea>`,
+                                `<select class="form-control performance-select selectize" data-id="${member.id}">
+                                    <option value="very good">Very Good</option>
+                                    <option value="good">Good</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>`
                             ]);
                         });
 
@@ -493,6 +511,12 @@ function makeAjaxRequestSmallGroupData(formData) {
                                     </label>
                                     </td>
                                     <td><textarea class="form-control remarks-textarea" data-id="${member.id}"></textarea></td>
+                                    <select class="form-control performance-select selectize" data-id="${member.id}">
+                                    <option value="very good">Very Good</option>
+                                    <option value="good">Good</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
                                 </tr>
                             `);
                         });
@@ -587,49 +611,71 @@ $('body').on('click', '#btnSaveMeeting', function () {
         const memberId = $checkedRadio.data('id');
         const isAbsent = $checkedRadio.val();
         const remarks = $row.find('.remarks-textarea').val();
-
+        const performance = $row.find('.performance-select').val();
+        if(isAbsent == 1){
+            var attendance = 'yes';
+        }else{
+             var attendance = 'no';
+        }
         memberData.push({
             memberId: memberId,
-            isAbsent: Number(isAbsent),
-            remarks: remarks
+            attendance: attendance,
+            remarks: remarks,
+            performance: performance
         });
     });
 
     formData.append('memberData', JSON.stringify(memberData));
 
-    let groupMeetingdata = {
-        TeamLeadersAbility: $("#txtTeamLeadersAbility").val(),
-        AccountStatement: $("#txtAccountStatement").val(),
-        ActivityStatement: $("#txtActivityStatement").val(),
-        Decision: $("input[name='decision']:checked").val() || "",
-        DecisionReason: $("#txtDecisionReson").val(),
-        GroupActivity: $("#txtGroupActivity").val(),
-        ReasonForNotDoingTeamWork: $("#txtResonFOrNotDoingTeamWork").val(),
-        MemberInterestGroupMeeting: $("#txtMemberInterstingGroupMeeting").val(),
-        EffectForTeamWork: $("#txtEffectForTeamWork").val(),
-        AreaManagerOpinion: $("#txtAreaManageOpinion").val(),
-        RegionalManagerFeedback: $("#txtRegionalManagerFeedback").val()
-    };
+    let containerGroup = $("#txtGroupMeetingQustions");
+    let groupMeetingdata = {};
 
-    formData.append('groupMeetingData', JSON.stringify(groupMeetingdata, null, 2));
+    // Loop through all inputs, selects, and textareas inside the container
+    containerGroup.find("input, select, textarea").each(function () {
+        let el = $(this);
+        let id = el.attr("id");
+        let name = el.attr("name");
+
+        // Handle radio buttons (only store checked value once per name group)
+        if (el.is("[type=radio]")) {
+            if (name && groupMeetingdata[name] === undefined) {
+                let checkedVal = containerGroup.find(`input[name='${name}']:checked`).val() || "";
+                groupMeetingdata[name] = checkedVal;
+            }
+        } else {
+            // For select, text, number, textarea — use ID if available, else name
+            let key = id || name;
+            if (key) {
+                groupMeetingdata[key] = el.val();
+            }
+        }
+    });
+
+    let foAttendance = $("input[name='foAttendanceMeeting']:checked").val() || "";
+    let dmAttendance = $("input[name='dmAttendanceMeeting']:checked").val() || "";
+
+    formData.append('foAttendance', foAttendance);
+    formData.append('dmAttendance', dmAttendance);
+
+
+    formData.append("groupMeetingData", JSON.stringify(groupMeetingdata, null, 2));
 
     let container = $("#txtVillageMeetingQustions");
     let dataVIllage = {};
 
-    // Handle inputs and textareas with ID or name
     container.find("input, select, textarea").each(function () {
         let el = $(this);
         let id = el.attr("id");
         let name = el.attr("name");
 
-        // For radio buttons, only get checked value once per name group
+
         if (el.is("[type=radio]")) {
-            if (dataVIllage[name] === undefined) { // only if not already set
+            if (dataVIllage[name] === undefined) {
                 let checkedVal = container.find(`input[name='${name}']:checked`).val() || "";
                 dataVIllage[name] = checkedVal;
             }
         } else {
-            // For select, text, number, textarea - use ID or name as key
+
             let key = id || name;
             if (key) {
                 dataVIllage[key] = el.val();

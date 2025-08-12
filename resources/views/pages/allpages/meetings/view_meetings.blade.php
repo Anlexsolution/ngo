@@ -54,7 +54,11 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Resource Person:</label>
                                 <p class="form-control-plaintext border p-2 bg-light rounded">
-                                    {{ $meetingData->resource_person }}
+                                    @foreach ($getResourcePersonData as $data)
+                                    @if ($data->id == $meetingData->resource_person)
+                                    {{ $data->full_name ?? '-' }}
+                                    @endif
+                                    @endforeach
                                 </p>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -133,6 +137,7 @@
                                         <th>Old Account Number</th>
                                         <th>Present / Absent</th>
                                         <th>Remarks</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -144,13 +149,14 @@
                                             <td>{{ $rec['nicNumber'] }}</td>
                                             <td>{{ $rec['oldAccNo'] }}</td>
                                             <td>
-                                                @if ($rec['absent'] == 0)
+                                                @if ($rec['attendance'] == 'no')
                                                     <span class="badge bg-danger px-3 py-2">Absent</span>
                                                 @else
                                                     <span class="badge bg-success px-3 py-2">Present</span>
                                                 @endif
                                             </td>
                                             <td>{{ $rec['remarks'] }}</td>
+                                             <td>{{ $rec['performance'] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

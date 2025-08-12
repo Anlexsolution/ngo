@@ -29,7 +29,7 @@ class manage_meeting_controller extends Controller
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
         $getAllResourcePerson = Resourceperson::all();
-        return view('pages.permission.meetings.add_meeting_per', [ 'getAllResourcePerson' => $getAllResourcePerson, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.permission.meetings.add_meeting_per', ['getAllResourcePerson' => $getAllResourcePerson, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function manage_meetings()
@@ -72,65 +72,69 @@ class manage_meeting_controller extends Controller
                 'fullName' => $fullName,
                 'nicNumber' => $nicNumber,
                 'oldAccNo' => $oldAccNo,
-                'absent' => $member->isAbsent,
-                'remarks' => $member->remarks
+                'attendance' => $member->attendance,
+                'remarks' => $member->remarks,
+                'performance' => $member->performance
             ];
         }
-        return view('pages.permission.meetings.view_meetings_per', [ 'memRecord' => $memRecord, 'meetingData' => $meetingData, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        $getResourcePersonData = Resourceperson::all();
+        return view('pages.permission.meetings.view_meetings_per', [ 'getResourcePersonData' => $getResourcePersonData, 'memRecord' => $memRecord, 'meetingData' => $meetingData, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
-  public function createMeeting(Request $request)
-{
-    // Optional: you can wrap DB operations in a transaction if saving multiple tables or related data
-    // DB::beginTransaction();
+    public function createMeeting(Request $request)
+    {
+        // Optional: you can wrap DB operations in a transaction if saving multiple tables or related data
+        // DB::beginTransaction();
 
-    try {
-        // CSRF check (optional if using Laravel middleware)
-        if ($request->_token !== $request->session()->token()) {
-            return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+        try {
+            // CSRF check (optional if using Laravel middleware)
+            if ($request->_token !== $request->session()->token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            // Create new Meeting instance
+            $meeting = new Meeting();
+
+            $meeting->meeting_title = $request->input('meetingTitle');
+            $meeting->meeting_date = $request->input('meetingDate');
+            $meeting->meeting_time = $request->input('meetingStartTime');
+            $meeting->meeting_end_time = $request->input('meetingEndTime');
+            $meeting->resource_person = $request->input('resourcePerson');
+            $meeting->resource_position = $request->input('resourcePosition');
+            $meeting->resource_contact_no = $request->input('resourceContactNo');
+            $meeting->meeting_type = $request->input('meetingType');
+            $meeting->division_id = $request->input('divisionId');
+            $meeting->village_id = $request->input('villageId');
+            $meeting->small_group_id = $request->input('smallGroupId');
+            $meeting->foAttendance = $request->input('foAttendance');
+            $meeting->dmAttendance = $request->input('dmAttendance');
+
+            // Save JSON strings directly, assuming columns are TEXT or JSON type in DB
+            $meeting->member_data = $request->input('memberData'); // Store raw JSON string
+
+            $meeting->group_meeting_data = $request->input('groupMeetingData');
+            $meeting->village_meeting_data = $request->input('villageMeetingData');
+            $meeting->awarness_meeting_data = $request->input('awarnessMeetingData');
+
+            $meeting->save();
+
+            // DB::commit();
+
+            return response()->json(['message' => 'Meeting created successfully', 'code' => 200]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // DB::rollBack();
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // DB::rollBack();
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
         }
-
-        // Create new Meeting instance
-        $meeting = new Meeting();
-
-        $meeting->meeting_title = $request->input('meetingTitle');
-        $meeting->meeting_date = $request->input('meetingDate');
-        $meeting->meeting_time = $request->input('meetingStartTime');
-         $meeting->meeting_end_time = $request->input('meetingEndTime');
-        $meeting->resource_person = $request->input('resourcePerson');
-        $meeting->resource_position = $request->input('resourcePosition');
-        $meeting->resource_contact_no = $request->input('resourceContactNo');
-        $meeting->meeting_type = $request->input('meetingType');
-        $meeting->division_id = $request->input('divisionId');
-        $meeting->village_id = $request->input('villageId');
-        $meeting->small_group_id = $request->input('smallGroupId');
-
-        // Save JSON strings directly, assuming columns are TEXT or JSON type in DB
-        $meeting->member_data = $request->input('memberData'); // Store raw JSON string
-
-        $meeting->group_meeting_data = $request->input('groupMeetingData');
-        $meeting->village_meeting_data = $request->input('villageMeetingData');
-        $meeting->awarness_meeting_data = $request->input('awarnessMeetingData');
-
-        $meeting->save();
-
-        // DB::commit();
-
-        return response()->json(['message' => 'Meeting created successfully', 'code' => 200]);
-    } catch (\Illuminate\Database\QueryException $e) {
-        // DB::rollBack();
-        return response()->json([
-            'error' => 'Database error: ' . $e->getMessage(),
-            'code' => 500,
-        ]);
-    } catch (\Exception $e) {
-        // DB::rollBack();
-        return response()->json([
-            'error' => 'An unexpected error occurred: ' . $e->getMessage(),
-            'code' => 500,
-        ]);
     }
-}
 
 
 
