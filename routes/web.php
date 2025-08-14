@@ -168,6 +168,7 @@ Route::post('/add-account-data', [account_controller::class, 'addAccount'])->mid
 Route::post('/add-expensive-income-data', [account_controller::class, 'addExpensiveIncome'])->middleware('auth');
 Route::post('transfer-account-data', [account_controller::class, 'transferAccount'])->middleware('auth');
 Route::post('account-account-transfer-data', [account_controller::class, 'transferAccountToAccount'])->middleware('auth');
+Route::post('account-member-transfer-data', [account_controller::class, 'transferMemberAccountToAccount'])->middleware('auth');
 //Manage Account
 
 //manage savings

@@ -133,6 +133,6 @@ class manage_savings_controller extends Controller
         $getSavId = $getSIdData->id;
         $getWithHisData = withdrawalhistory::where('savingId', $getSavId)->get();
 $withdrawalhistories = DB::table('withdrawalhistories')->where('memberId', $getmemberUniqueId)->where('status', 'Withdrawal successfully')->get();
-        return view('pages.view_saving_history_per', [ 'withdrawalhistories' => $withdrawalhistories, 'getWithHisData' => $getWithHisData,  'geInterData' => $geInterData, 'memberUniqueId' => $getmem->uniqueId,  'memberId' => $getMemberId, 'getUser' => $getUser, 'getUserRole' => $getUserRole, 'getSavingHistory' => $getSavingHistory, 'getMember' => $getMember, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.view_saving_history_per', [ 'savingId' => $decId, 'memberId' => $getMemberId, 'withdrawalhistories' => $withdrawalhistories, 'getWithHisData' => $getWithHisData,  'geInterData' => $geInterData, 'memberUniqueId' => $getmem->uniqueId,  'memberId' => $getMemberId, 'getUser' => $getUser, 'getUserRole' => $getUserRole, 'getSavingHistory' => $getSavingHistory, 'getMember' => $getMember, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 }

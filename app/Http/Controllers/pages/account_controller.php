@@ -152,6 +152,103 @@ class account_controller extends Controller
         }
     }
 
+    function transferMemberAccountToAccount(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtSavingId = $request->input('txtSavingId');
+            $txtMemberAmount = $request->input('txtMemberAmount');
+            $txtSelectMember = $request->input('txtSelectMember');
+
+            $getSelectMemberData = member::find($txtSelectMember);
+
+            ///TO Member Account
+            $getSavData = DB::table('savings')->where('savingsId', $txtSavingId)->first();
+            $getSavBalance = $getSavData->totalAmount;
+            $getSavId = $getSavData->id;
+            $getsavingsId = $getSavData->savingsId;
+            $getUniqueId = $getSavData->memberId;
+
+            if ($getSavBalance < $txtMemberAmount) {
+                return response()->json(['error' => 'Insufficient balance', 'code' => 400]);
+            }
+
+            $getSavBalance = $getSavBalance - $txtMemberAmount;
+            $savData = [
+                'totalAmount' => $getSavBalance,
+            ];
+
+            $resultUpdate = UpdateHelper::updateRecord('savings', $getSavId, $savData);
+
+            $randomId = str_pad(mt_rand(0, 999999999999), 12, '0', STR_PAD_LEFT);
+            $savTransHis = [
+                'savingId' => $getsavingsId,
+                'balance' => $getSavBalance,
+                'userId' => Auth::user()->id,
+                'memberId' => $getUniqueId,
+                'type' => 'Debit',
+                'amount' => $txtMemberAmount,
+                'description' => "Amount Transfer to member - " . $getSelectMemberData->firstName . ' ' . $getSelectMemberData->lastName,
+                'randomId' => $randomId,
+            ];
+            $resultInsert = InsertHelper::insertRecord('savingtransectionhistories', $savTransHis);
+            ///TO Member Account
+
+
+            ///FROM Member Account
+            $getSavDataFrom = DB::table('savings')->where('memberId', $getSelectMemberData->uniqueId)->first();
+            $getSavBalanceFrom = $getSavDataFrom->totalAmount;
+            $getSavIdFrom = $getSavDataFrom->id;
+            $getsavingsIdFrom = $getSavDataFrom->savingsId;
+            $getUniqueIdFrom = $getSavDataFrom->memberId;
+
+            $getsavingsBlaFrom = $getSavBalanceFrom + $txtMemberAmount;
+            $savDataFrom = [
+                'totalAmount' => $getsavingsBlaFrom,
+            ];
+
+            $getMemFromData = DB::table('members')->where('uniqueId', $getUniqueId)->first();
+
+            $resultUpdateFrom = UpdateHelper::updateRecord('savings', $getSavIdFrom, $savDataFrom);
+
+            $randomIdFrom = str_pad(mt_rand(0, 999999999999), 12, '0', STR_PAD_LEFT);
+            $savTransHisFrom = [
+                'savingId' => $getsavingsIdFrom,
+                'balance' => $getsavingsBlaFrom,
+                'userId' => Auth::user()->id,
+                'memberId' => $getUniqueIdFrom,
+                'type' => 'Credit',
+                'amount' => $txtMemberAmount,
+                'description' => "Amount Transfer From member - " . $getMemFromData->firstName . ' ' . $getMemFromData->lastName,
+                'randomId' => $randomIdFrom,
+            ];
+            $resultInsertFrom = InsertHelper::insertRecord('savingtransectionhistories', $savTransHisFrom);
+            ///FROM Member Account
+
+            if ($resultUpdate === true && $resultInsert === true && $resultUpdateFrom == true && $resultInsertFrom == true) {
+                return response()->json(['success' => 'Member Transfer successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => 'Failed to insert account transfer history', 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
 
     function transferAccount(Request $request)
     {
@@ -250,7 +347,7 @@ class account_controller extends Controller
         $getAcctransferHis = DB::table('accounttransferhistories')->where('fromAccountId', $decId)->orWhere('toAccountId', $decId)->get();
         $getAccountDetails = DB::table('accounttransectionhistories')->where('accountId', $decId)->get();
         $getAccount = account::all();
-        return view('pages.permission.account.view_account_details_per', [ 'getAccount' => $getAccount, 'decId' => $decId, 'getAcctransferHis' => $getAcctransferHis, 'getAccType' => $getAccType, 'getUser' => $getUser, 'getAccountDetails' => $getAccountDetails, 'getUserRole' => $getUserRole, 'getSmallGroup' => $getSmallGroup, 'getVillage' => $getVillage, 'getDivision' => $getDivision, 'getMember' => $getMember, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.permission.account.view_account_details_per', ['getAccount' => $getAccount, 'decId' => $decId, 'getAcctransferHis' => $getAcctransferHis, 'getAccType' => $getAccType, 'getUser' => $getUser, 'getAccountDetails' => $getAccountDetails, 'getUserRole' => $getUserRole, 'getSmallGroup' => $getSmallGroup, 'getVillage' => $getVillage, 'getDivision' => $getDivision, 'getMember' => $getMember, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     public function manageAccount()

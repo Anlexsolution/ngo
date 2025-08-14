@@ -20,6 +20,10 @@
                         <div class="col-6 d-flex justify-content-end">
 
                             @if ($userType == 'superAdmin')
+                            <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#transferMemberSavingsAmountModal"><i
+                                        class="menu-icon ti ti-square-rounded-plus"></i>
+                                    Member Transfer</button>
                                 <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal"
                                     data-bs-target="#transferSavingsAmountModal"><i
                                         class="menu-icon ti ti-square-rounded-plus"></i>
@@ -58,6 +62,7 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <input type="hidden" class="form-control" id="txtSavingId" value="{{ $savingId }}">
                         <div class="row mt-3">
                             <div class="col d-flex justify-content-end">
                                 <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample"
@@ -383,3 +388,50 @@
     </div>
 </div>
 <!--/ Transfer Saving History Modal -->
+
+<!-- Transfer Member Saving History Modal -->
+<div class="modal fade" id="transferMemberSavingsAmountModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h4 class="mb-2">Transfer Member Saving Amount</h4>
+                    <p>Transfer Member Saving Amount</p>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <div class="form-group">
+                        <label>Select Member</label>
+                        <select class="selectize" id="txtSelectMember">
+                            <option value="">---Select---</option>
+                          @foreach ($getAllMemberData as $mem)
+                          @if ($memberId != $mem->id)
+                          <option value="{{ $mem->id }}">{{ $mem->firstName }} {{ $mem->lastName }}</option>
+                          @endif
+                          @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="text" id="txtMemberAmount" class="form-control" placeholder="Enter Amount" />
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-12 text-center demo-vertical-spacing">
+                    <button class="btn btn-primary me-4" id="btnTransferMemberAccount">Transfer</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        Discard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ Transfer Member Saving History Modal -->
