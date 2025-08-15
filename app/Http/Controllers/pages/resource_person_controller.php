@@ -74,6 +74,7 @@ class resource_person_controller extends Controller
             $txtNic               = $request->input('txtNic');
             $txtContactNo         = $request->input('txtContactNo');
             $txtWhatsappNo        = $request->input('txtWhatsappNo');
+            $txtaddress           = $request->input('txtaddress');
 
             // Get location information
             $latitude  = $request->input('latitude');
@@ -105,6 +106,7 @@ class resource_person_controller extends Controller
                 'whatsapp_no'        => $txtWhatsappNo,
                 'created_at'         => now(),
                 'updated_at'         => now(),
+                'address'            => $txtaddress,
             ];
 
             // Insert into database

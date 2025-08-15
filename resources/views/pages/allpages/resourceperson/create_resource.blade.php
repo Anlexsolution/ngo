@@ -73,6 +73,10 @@
                                 <label>Whatsapp No</label>
                                 <input type="number" class="form-control" id="txtWhatsappNo">
                             </div>
+                            <div class="col-sm-12 col-md-6 mt-3">
+                                <label>Address</label>
+                                <input type="text" class="form-control" id="txtaddress">
+                            </div>
                             <div class="col-sm-12 col-md-12 d-flex justify-content-end mt-3">
                                 <button class="btn btn-primary" id="btnSaveResource">Save</button>
                             </div>

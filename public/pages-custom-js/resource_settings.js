@@ -129,6 +129,7 @@ $('body').on('click', '#btnSaveResource', function () {
     var txtNic = $('#txtNic').val();
     var txtContactNo = $('#txtContactNo').val();
     var txtWhatsappNo = $('#txtWhatsappNo').val();
+    var txtaddress = $('#txtaddress').val();
 
     // Append to formData
     formData.append('txtFullName', txtFullName);
@@ -142,6 +143,7 @@ $('body').on('click', '#btnSaveResource', function () {
     formData.append('txtNic', txtNic);
     formData.append('txtContactNo', txtContactNo);
     formData.append('txtWhatsappNo', txtWhatsappNo);
+    formData.append('txtaddress', txtaddress);
 
     // Basic validation
     if (txtFullName === '' || txtDivision === '' || txType === '' || txtDesignation === '') {
