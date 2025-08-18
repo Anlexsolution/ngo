@@ -37,7 +37,7 @@
                                     @foreach ($getResourcePerson as $pro)
                                         <tr>
                                             <td>{{ $count++ }}</td>
-                                            <td>{{ $pro->full_name }}</td>
+                                            <td><a href="{{ route('view_person', $pro->id) }}">{{ $pro->full_name }}</a></td>
                                             <td>
                                                 @foreach ($getDivisionData as $data)
                                                     @if ($data->id == $pro->division_id)

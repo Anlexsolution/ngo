@@ -335,6 +335,7 @@ Route::get('/view_member_saving_report/{id}', [manage_reports_controller::class,
 
 ///Resourcde Person
 Route::get('/manage_resource_person', [resource_person_controller::class, 'manageResourcePerson'])->middleware('auth');
+Route::get('/view_person/{id}', [resource_person_controller::class, 'viewResourcePerson'])->middleware('auth')->name('view_person');
 Route::get('/create_resource', [resource_person_controller::class, 'create_resource'])->middleware('auth');
 Route::post('/get-sub-qualification-data', [resource_person_controller::class, 'getSubQualificaton'])->middleware('auth');
 Route::post('/add-resource-person', [resource_person_controller::class, 'addResourcePerson'])->middleware('auth');

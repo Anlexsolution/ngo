@@ -13,6 +13,7 @@ use App\Models\loanpurposesub;
 use App\Models\member;
 use App\Models\Qualification;
 use App\Models\Resourceperson;
+use App\Models\SUbqualification;
 use App\Models\userRole;
 use App\Models\village;
 use Illuminate\Http\Request;
@@ -22,6 +23,21 @@ use Session;
 class resource_person_controller extends Controller
 {
 
+    public function viewResourcePerson($id){
+        $getResource = Resourceperson::find($id);
+                $getUserRole = userRole::all();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getloanMainCatData = loanpurpose::all();
+        $getLoanSubCatData = loanpurposesub::all();
+        $getResourcePerson = Resourceperson::all();
+        $getDivisionData = division::all();
+        $getVillageData = village::all();
+        $getQualification = Qualification::all();
+        $subQualification = SUbqualification::all();
+        return view('pages.permission.resourceperson.view_person_per', ['subQualification' => $subQualification, 'getResource' => $getResource, 'getQualification' => $getQualification, 'getVillageData' => $getVillageData, 'getDivisionData' => $getDivisionData, 'getResourcePerson' => $getResourcePerson, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'getloanMainCatData' => $getloanMainCatData, 'getLoanSubCatData' => $getLoanSubCatData]);
+
+    }
 
     public function getResourcePersonData(Request $request)
     {
