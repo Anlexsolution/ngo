@@ -31,7 +31,25 @@ class manage_reports_controller extends Controller
 
 {
 
-    function viewMemberSavingReport($id){
+    function meeting_report()
+    {
+          $getUserRole = userRole::all();
+        $getSmallGroup = smallgroup::all();
+        $getVillage = village::all();
+        $getDivision = division::all();
+        $getMember = member::all();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getSavingData = saving::all();
+        $getLoanRepaymentData = loanschedule::all();
+        $getDeathSubscription = deathsubscription::all();
+        $getDeathDonation = deathdonation::all();
+
+        return view('pages.permission.reports.meeting_report_per', compact( 'getUserRole', 'getSmallGroup', 'getVillage', 'getDivision', 'getMember', 'getLoansData', 'getAllMemberData', 'getSavingData', 'getLoanRepaymentData', 'getDeathSubscription', 'getDeathDonation'));
+    }
+
+    function viewMemberSavingReport($id)
+    {
         $getUserRole = userRole::all();
         $getSmallGroup = smallgroup::all();
         $getVillage = village::all();
@@ -53,7 +71,7 @@ class manage_reports_controller extends Controller
         $getLoanRepaymentData = loanschedule::all();
         $getLoanRepaymentData = loanschedule::all();
         $getData = DB::table('accounttransectionhistories')->where('memberId', Crypt::decrypt($id))->get();
-        return view( 'pages.permission.reports.view_member_saving_report_per' , compact( 'getData' , 'getUserRole', 'getSmallGroup', 'getVillage', 'getDivision', 'getMember', 'getLoansData', 'getAllMemberData', 'getSavingData', 'getLoanRepaymentData', 'getDeathSubscription', 'getDeathDonation', 'getOtherIncome', 'getDivisionDetails', 'getUsers', 'getVillageDetails', 'getProfession', 'getSubProfession', 'getSmallGroupDetails', 'getLoanRepaymentData', 'getLoanRepaymentData'));
+        return view('pages.permission.reports.view_member_saving_report_per', compact('getData', 'getUserRole', 'getSmallGroup', 'getVillage', 'getDivision', 'getMember', 'getLoansData', 'getAllMemberData', 'getSavingData', 'getLoanRepaymentData', 'getDeathSubscription', 'getDeathDonation', 'getOtherIncome', 'getDivisionDetails', 'getUsers', 'getVillageDetails', 'getProfession', 'getSubProfession', 'getSmallGroupDetails', 'getLoanRepaymentData', 'getLoanRepaymentData'));
     }
 
     function groupLeaderReport()
@@ -116,86 +134,86 @@ class manage_reports_controller extends Controller
         $getLoanData = DB::table('loans')->where('loanStatus', '=', 'Active')->get();
         $getAllRepaymentData = loanrepayment::all();
         $getLoanPurposeData = loanpurpose::all();
-        return view('pages.permission.reports.loan_report_per', [ 'getLoanPurposeData' => $getLoanPurposeData, 'getAllRepaymentData' => $getAllRepaymentData, 'getLoanData' => $getLoanData, 'getDivision' => $getDivision, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.permission.reports.loan_report_per', ['getLoanPurposeData' => $getLoanPurposeData, 'getAllRepaymentData' => $getAllRepaymentData, 'getLoanData' => $getLoanData, 'getDivision' => $getDivision, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
-  public function collectionReport()
-{
-    $getUserRole = userRole::all();
-    $getLoansData = loan::all();
-    $getAllMemberData = member::all();
-    $getDivision = division::all();
-    $getUser = DB::table('users')->where('userType', '=', 'Field Officer')->get();
+    public function collectionReport()
+    {
+        $getUserRole = userRole::all();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getDivision = division::all();
+        $getUser = DB::table('users')->where('userType', '=', 'Field Officer')->get();
 
-    // Raw transaction data with joins
-    $rawData = DB::table('accounttransectionhistories')
-        ->join('users', 'accounttransectionhistories.collectionBy', '=', 'users.id')
-        ->join('members', 'accounttransectionhistories.memberId', '=', 'members.id')
-        ->join('divisions', 'members.divisionId', '=', 'divisions.id')
-        ->join('villages', 'members.villageId', '=', 'villages.id')
-        ->join('smallgroups', 'members.smallGroupId', '=', 'smallgroups.id')
-        ->select(
-            'accounttransectionhistories.*',
-            'users.name as collectedBy',
-            'members.id as memberId',
-            'members.firstName as memberFirstName',
-            'members.lastName as memberLastName',
-            'members.nicNumber',
-            'members.oldAccountNumber',
-            'members.divisionId as divisionId',
-            'members.villageId as villageId',
-            'members.smallGroupId as smallGroupId',
-            'divisions.divisionName',
-            'villages.villageName',
-            'smallgroups.smallGroupName'
-        )
-        ->orderBy('accounttransectionhistories.repaymentDate', 'desc')
-        ->get();
+        // Raw transaction data with joins
+        $rawData = DB::table('accounttransectionhistories')
+            ->join('users', 'accounttransectionhistories.collectionBy', '=', 'users.id')
+            ->join('members', 'accounttransectionhistories.memberId', '=', 'members.id')
+            ->join('divisions', 'members.divisionId', '=', 'divisions.id')
+            ->join('villages', 'members.villageId', '=', 'villages.id')
+            ->join('smallgroups', 'members.smallGroupId', '=', 'smallgroups.id')
+            ->select(
+                'accounttransectionhistories.*',
+                'users.name as collectedBy',
+                'members.id as memberId',
+                'members.firstName as memberFirstName',
+                'members.lastName as memberLastName',
+                'members.nicNumber',
+                'members.oldAccountNumber',
+                'members.divisionId as divisionId',
+                'members.villageId as villageId',
+                'members.smallGroupId as smallGroupId',
+                'divisions.divisionName',
+                'villages.villageName',
+                'smallgroups.smallGroupName'
+            )
+            ->orderBy('accounttransectionhistories.repaymentDate', 'desc')
+            ->get();
 
-    // Group by member and date
-    $groupedData = $rawData->groupBy(function ($item) {
-        return $item->memberId . '|' . \Carbon\Carbon::parse($item->repaymentDate)->format('Y-m-d');
-    });
+        // Group by member and date
+        $groupedData = $rawData->groupBy(function ($item) {
+            return $item->memberId . '|' . \Carbon\Carbon::parse($item->repaymentDate)->format('Y-m-d');
+        });
 
-    // Map grouped results
-    $finalData = $groupedData->map(function ($group) {
-        $first = $group->first();
+        // Map grouped results
+        $finalData = $groupedData->map(function ($group) {
+            $first = $group->first();
 
-        $totalSaving = $group->filter(fn ($t) => str_contains($t->description, 'Saving'))->sum('amount');
-        $totalPrincipal = $group->filter(fn ($t) => str_contains($t->description, 'Loan'))->sum('principalAmount');
-        $totalInterest = $group->filter(fn ($t) => str_contains($t->description, 'Loan'))->sum('interest');
+            $totalSaving = $group->filter(fn($t) => str_contains($t->description, 'Saving'))->sum('amount');
+            $totalPrincipal = $group->filter(fn($t) => str_contains($t->description, 'Loan'))->sum('principalAmount');
+            $totalInterest = $group->filter(fn($t) => str_contains($t->description, 'Loan'))->sum('interest');
 
-        return [
-            'collectionDate' => \Carbon\Carbon::parse($first->repaymentDate)->format('Y-m-d'),
-            'memberId' => $first->memberId,
-            'divisionId' => $first->divisionId,
-            'villageId' => $first->villageId,
-            'smallGroupId' => $first->smallGroupId,
-            'memberFirstName' => $first->memberFirstName,
-            'memberLastName' => $first->memberLastName,
-            'nicNumber' => $first->nicNumber,
-            'oldAccountNumber' => $first->oldAccountNumber,
-            'divisionName' => $first->divisionName,
-            'villageName' => $first->villageName,
-            'smallGroupName' => $first->smallGroupName,
-            'collectedBy' => $first->collectedBy,
-            'totalSaving' => $totalSaving,
-            'totalPrincipal' => $totalPrincipal,
-            'totalInterest' => $totalInterest,
-            'totalAmount' => $totalSaving + $totalPrincipal + $totalInterest,
-            'descriptions' => $group->pluck('description')->unique()->implode(', ')
-        ];
-    })->values();
+            return [
+                'collectionDate' => \Carbon\Carbon::parse($first->repaymentDate)->format('Y-m-d'),
+                'memberId' => $first->memberId,
+                'divisionId' => $first->divisionId,
+                'villageId' => $first->villageId,
+                'smallGroupId' => $first->smallGroupId,
+                'memberFirstName' => $first->memberFirstName,
+                'memberLastName' => $first->memberLastName,
+                'nicNumber' => $first->nicNumber,
+                'oldAccountNumber' => $first->oldAccountNumber,
+                'divisionName' => $first->divisionName,
+                'villageName' => $first->villageName,
+                'smallGroupName' => $first->smallGroupName,
+                'collectedBy' => $first->collectedBy,
+                'totalSaving' => $totalSaving,
+                'totalPrincipal' => $totalPrincipal,
+                'totalInterest' => $totalInterest,
+                'totalAmount' => $totalSaving + $totalPrincipal + $totalInterest,
+                'descriptions' => $group->pluck('description')->unique()->implode(', ')
+            ];
+        })->values();
 
-    return view('pages.permission.reports.collection_reports_per', [
-        'getUser' => $getUser,
-        'getDivision' => $getDivision,
-        'getUserRole' => $getUserRole,
-        'getLoansData' => $getLoansData,
-        'getAllMemberData' => $getAllMemberData,
-        'getCollectionData' => $finalData,
-    ]);
-}
+        return view('pages.permission.reports.collection_reports_per', [
+            'getUser' => $getUser,
+            'getDivision' => $getDivision,
+            'getUserRole' => $getUserRole,
+            'getLoansData' => $getLoansData,
+            'getAllMemberData' => $getAllMemberData,
+            'getCollectionData' => $finalData,
+        ]);
+    }
 
 
 
@@ -209,72 +227,72 @@ class manage_reports_controller extends Controller
     }
 
     function memberReport()
-{
-    $getUserRole        = userRole::all();
-    $getMember          = member::with('division', 'village', 'smallgroup')->get();
-    $getDivision        = division::all();
-    $getProfession      = profession::all();
-    $getSavingData      = saving::all();
-    $getLoansData       = loan::all();
-    $getAllMemberData   = member::all(); // Optional, if different from $getMember
-    $getOtherIncomeData = DB::table('otherincomes')->get();
-    $getDeathSubData    = DB::table('deathsubscriptions')->get();
-    $savingtransectionhistories = savingtransectionhistory::all();
+    {
+        $getUserRole        = userRole::all();
+        $getMember          = member::with('division', 'village', 'smallgroup')->get();
+        $getDivision        = division::all();
+        $getProfession      = profession::all();
+        $getSavingData      = saving::all();
+        $getLoansData       = loan::all();
+        $getAllMemberData   = member::all(); // Optional, if different from $getMember
+        $getOtherIncomeData = DB::table('otherincomes')->get();
+        $getDeathSubData    = DB::table('deathsubscriptions')->get();
+        $savingtransectionhistories = savingtransectionhistory::all();
 
-    return view('pages.permission.reports.member_report_per', [
-        'getUserRole'       => $getUserRole,
-        'getMember'         => $getMember,
-        'getDivision'       => $getDivision,
-        'getProfession'     => $getProfession,
-        'getSavingData'     => $getSavingData,
-        'getLoansData'      => $getLoansData,
-        'getAllMemberData'  => $getAllMemberData,
-        'getOtherIncomeData'=> $getOtherIncomeData,
-        'getDeathSubData'   => $getDeathSubData,
-        'savingtransectionhistories' => $savingtransectionhistories,
-        // If needed:
-        'villages'          => village::all(),
-        'smallGroups'       => smallgroup::all(),
-    ]);
-}
+        return view('pages.permission.reports.member_report_per', [
+            'getUserRole'       => $getUserRole,
+            'getMember'         => $getMember,
+            'getDivision'       => $getDivision,
+            'getProfession'     => $getProfession,
+            'getSavingData'     => $getSavingData,
+            'getLoansData'      => $getLoansData,
+            'getAllMemberData'  => $getAllMemberData,
+            'getOtherIncomeData' => $getOtherIncomeData,
+            'getDeathSubData'   => $getDeathSubData,
+            'savingtransectionhistories' => $savingtransectionhistories,
+            // If needed:
+            'villages'          => village::all(),
+            'smallGroups'       => smallgroup::all(),
+        ]);
+    }
 
 
 
-public function memberSavingReport(Request $request)
-{
-    $year = $request->input('year', now()->year); // Default to current year if not selected
+    public function memberSavingReport(Request $request)
+    {
+        $year = $request->input('year', now()->year); // Default to current year if not selected
 
-    $getUserRole        = userRole::all();
-    $getMember          = member::with('division', 'village', 'smallgroup')->get();
-    $getDivision        = division::all();
-    $getProfession      = profession::all();
-    $getSavingData      = saving::all();
-    $getLoansData       = loan::all();
-    $getAllMemberData   = member::all(); // Optional
-    $getOtherIncomeData = DB::table('otherincomes')->get();
-    $getDeathSubData    = DB::table('deathsubscriptions')->get();
+        $getUserRole        = userRole::all();
+        $getMember          = member::with('division', 'village', 'smallgroup')->get();
+        $getDivision        = division::all();
+        $getProfession      = profession::all();
+        $getSavingData      = saving::all();
+        $getLoansData       = loan::all();
+        $getAllMemberData   = member::all(); // Optional
+        $getOtherIncomeData = DB::table('otherincomes')->get();
+        $getDeathSubData    = DB::table('deathsubscriptions')->get();
 
-    // ✅ Filter by selected year
-    $getData = DB::table('savingtransectionhistories')
-                ->whereYear('created_at', $year)
-                ->get();
+        // ✅ Filter by selected year
+        $getData = DB::table('savingtransectionhistories')
+            ->whereYear('created_at', $year)
+            ->get();
 
-    return view('pages.permission.reports.member_savings_report_per', [
-        'getUserRole'        => $getUserRole,
-        'getMember'          => $getMember,
-        'getDivision'        => $getDivision,
-        'getProfession'      => $getProfession,
-        'getSavingData'      => $getSavingData,
-        'getLoansData'       => $getLoansData,
-        'getAllMemberData'   => $getAllMemberData,
-        'getOtherIncomeData' => $getOtherIncomeData,
-        'getDeathSubData'    => $getDeathSubData,
-        'getData'            => $getData,
-        'villages'           => village::all(),
-        'smallGroups'        => smallgroup::all(),
-        'selectedYear'       => $year, // Optional: to show in view
-    ]);
-}
+        return view('pages.permission.reports.member_savings_report_per', [
+            'getUserRole'        => $getUserRole,
+            'getMember'          => $getMember,
+            'getDivision'        => $getDivision,
+            'getProfession'      => $getProfession,
+            'getSavingData'      => $getSavingData,
+            'getLoansData'       => $getLoansData,
+            'getAllMemberData'   => $getAllMemberData,
+            'getOtherIncomeData' => $getOtherIncomeData,
+            'getDeathSubData'    => $getDeathSubData,
+            'getData'            => $getData,
+            'villages'           => village::all(),
+            'smallGroups'        => smallgroup::all(),
+            'selectedYear'       => $year, // Optional: to show in view
+        ]);
+    }
 
 
 

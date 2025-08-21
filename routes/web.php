@@ -330,6 +330,7 @@ Route::get('/loan_arreas_report', [manage_reports_controller::class, 'loanArreas
 Route::get('/group_report', [manage_reports_controller::class, 'groupReport'])->middleware('auth');
 Route::get('/group_leader_report', [manage_reports_controller::class, 'groupLeaderReport'])->middleware('auth');
 Route::get('/member_savings_report', [manage_reports_controller::class, 'memberSavingReport'])->middleware('auth');
+Route::get('/meeting_report', [manage_reports_controller::class, 'meeting_report'])->middleware('auth');
 Route::get('/view_member_saving_report/{id}', [manage_reports_controller::class, 'viewMemberSavingReport'])->middleware('auth')->name('view_member_saving_report');
 //manage reports
 

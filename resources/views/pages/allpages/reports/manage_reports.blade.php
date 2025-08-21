@@ -9,6 +9,7 @@
         ['url' => '/group_report', 'title' => 'Group Report'],
         ['url' => '/group_leader_report', 'title' => 'Group Leader Report'],
         ['url' => '/member_savings_report', 'title' => 'Member Savings Report'],
+        ['url' => '/meeting_report', 'title' => 'Meeting Report'],
     ];
 @endphp
 
@@ -18,7 +19,7 @@
         border: 1px solid #dee2e6;
         transition: all 0.3s ease-in-out;
         border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     }
 
     .report-card:hover {
@@ -71,7 +72,7 @@
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-            @foreach($reports as $report)
+            @foreach ($reports as $report)
                 <div class="col">
                     <a href="{{ $report['url'] }}" class="card-link">
                         <div class="report-card p-3 h-100">
