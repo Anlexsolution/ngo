@@ -62,7 +62,7 @@
                                         @if (auth()->user()->userType == 'superAdmin')
                                             <tr>
                                                 <td>{{ $count++ }}</td>
-                                                <td> <a href="{{ route('view_death_history', $encryptedId) }}">
+                                                <td> <a href="{{ route('view_other_income', $encryptedId) }}">
                                                         {{ $savings->incomId ?? 'N/A' }}
                                                     </a></td>
                                                 <td>{{ $savings->member->firstName ?? 'N/A' }}</td>
@@ -102,7 +102,7 @@
                                                         in_array($savings->member->villageId, json_decode(auth()->user()->village)))
                                                     <tr>
                                                         <td>{{ $count++ }}</td>
-                                                        <td> <a href="{{ route('view_death_history', $encryptedId) }}">
+                                                        <td> <a href="{{ route('view_other_income', $encryptedId) }}">
                                                                 {{ $savings->incomId ?? 'N/A' }}
                                                             </a></td>
                                                         <td>{{ $savings->member->firstName ?? 'N/A' }}</td>

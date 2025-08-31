@@ -9,14 +9,33 @@ use App\Models\division;
 use App\Models\loan;
 use App\Models\member;
 use App\Models\otherincome;
+use App\Models\otherincomehistory;
 use App\Models\profession;
 use App\Models\userRole;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class manage_other_income_controller extends Controller
 {
+
+        public function view_other_income($id)
+    {
+        $decId = decrypt($id);
+        $getUser = User::all();
+        $getUserRole = userRole::all();
+        $getDeathHistory = otherincomehistory::where('incomId', $decId)->get();
+        $getMember = member::all();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getDeathData = DB::table('otherincomes')->where('incomId', $decId)->first();
+        $getMemId = $getDeathData->memberId;
+        $getMemberData = DB::table('members')->where('uniqueId', $getMemId)->first();
+        $memberId =  $getMemberData->id;
+        return view('pages.permission.otherincome.view_other_income_per', ['memberId' => $memberId, 'getUser' => $getUser, 'getUserRole' => $getUserRole, 'getDeathHistory' => $getDeathHistory, 'getMember' => $getMember, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+    }
 
         function otherIncomeImportData(Request $request)
     {

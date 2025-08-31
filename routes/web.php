@@ -255,7 +255,7 @@ Route::post('/add-death-distribute-data', [death_manage_controller::class, 'deat
 
 //Manage Other Income
 Route::get('/manage_other_incomes', [manage_other_income_controller::class, 'manageOtherIncomes'])->middleware('auth');
-
+Route::get('/view_other_income/{id}', [manage_other_income_controller::class, 'view_other_income'])->middleware('auth')->name('view_other_income');
 Route::post('/import-other-income-data', [manage_other_income_controller::class, 'otherIncomeImportData'])->middleware('auth');
 //Manage Other Income
 
