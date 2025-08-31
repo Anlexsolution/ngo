@@ -44,6 +44,20 @@
                 </div>
             </div>
 
+                        <div class="col-12 col-sm-6 col-lg-4 mb-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="mb-4 text-heading ti ti-users-group ti-32px"></i>
+                        <h5>Add New GN Division</h5>
+                        <a href="/division_by_gn">
+                            <button type="button" class="btn btn-primary">
+                                ADD
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="card shadow">
             <div class="card-header text-uppercase custom-header bg-primary text-bg-info fw-bold">
