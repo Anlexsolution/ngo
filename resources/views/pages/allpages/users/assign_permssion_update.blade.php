@@ -516,7 +516,7 @@
                                             <input class="form-check-input userPermissions" type="checkbox"
                                                 name="permissions[]" value="report" id="report"
                                                 @if (in_array('report', json_decode($permissions))) checked @endif
-                                                onchange="toggleSubPermissions(this, '#openingBalanceReport, #memberReport, #withdrawalReport, #collectionReport, #collectionvsdeposit, #loanReport')">
+                                                onchange="toggleSubPermissions(this, '#openingBalanceReport, #memberReport, #withdrawalReport, #collectionReport, #collectionvsdeposit, #loanReport, #loanArreasReport, #memberSavingsReport, #meetingReport')">
                                             <label class="form-check-label" for="report">
                                                 Reports
                                             </label>
@@ -577,6 +577,22 @@
                                                 @if (in_array('loanArreasReport', json_decode($permissions))) checked @endif>
                                             <label class="form-check-label" for="loanArreasReport">
                                                 Loan Arreas Report
+                                            </label>
+                                        </div>
+                                         <div class="form-check ms-4">
+                                            <input class="form-check-input userPermissions" type="checkbox"
+                                                name="permissions[]" value="memberSavingsReport" id="memberSavingsReport"
+                                                @if (in_array('memberSavingsReport', json_decode($permissions))) checked @endif>
+                                            <label class="form-check-label" for="memberSavingsReport">
+                                                Member Saving Report
+                                            </label>
+                                        </div>
+                                        <div class="form-check ms-4">
+                                            <input class="form-check-input userPermissions" type="checkbox"
+                                                name="permissions[]" value="meetingReport" id="meetingReport"
+                                                @if (in_array('meetingReport', json_decode($permissions))) checked @endif>
+                                            <label class="form-check-label" for="meetingReport">
+                                                Meeting  Report
                                             </label>
                                         </div>
                                     </div>

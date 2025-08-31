@@ -38,7 +38,7 @@
                             $usersDataPer = json_decode($usersDataPer, true);
                         @endphp
 
-                        @if (in_array('report', $usersDataPer) || in_array('meetingReport', $usersDataPer))
+                        @if (in_array('meetingReport', $usersDataPer))
                             @include('pages.allpages.reports.meeting_report')
                         @else
                             @include('pages.allpages.401')

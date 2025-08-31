@@ -438,7 +438,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input userPermissions" type="checkbox"
                                         name="permissions[]" value="report" id="report"
-                                        onchange="toggleSubPermissions(this, '#openingBalanceReport, #memberReport, #withdrawalReport, #collectionReport, #collectionvsdeposit, #loanReport')">
+                                        onchange="toggleSubPermissions(this, '#openingBalanceReport, #memberReport, #withdrawalReport, #collectionReport, #collectionvsdeposit, #loanReport, #loanArreasReport, #memberSavingsReport, #meetingReport')">
                                     <label class="form-check-label" for="report">
                                         Reports
                                     </label>
@@ -487,12 +487,28 @@
                                 </div>
                                 <div class="form-check ms-4">
                                     <input class="form-check-input userPermissions" type="checkbox"
-                                        name="permissions[]" value="loanArreasReport" id="loanArreasReport"
-                                        >
+                                        name="permissions[]" value="loanArreasReport" id="loanArreasReport">
                                     <label class="form-check-label" for="loanArreasReport">
                                         Loan Arreas Report
                                     </label>
-   
+
+                                </div>
+                                <div class="form-check ms-4">
+                                    <input class="form-check-input userPermissions" type="checkbox"
+                                        name="permissions[]" value="memberSavingsReport" id="memberSavingsReport">
+                                    <label class="form-check-label" for="memberSavingsReport">
+                                        Member Saving Report
+                                    </label>
+
+                                </div>
+                                <div class="form-check ms-4">
+                                    <input class="form-check-input userPermissions" type="checkbox"
+                                        name="permissions[]" value="meetingReport" id="meetingReport">
+                                    <label class="form-check-label" for="meetingReport">
+                                        Meeting Report
+                                    </label>
+
+                                </div>
                             </div>
 
                             <!-- User Manage Module -->
@@ -553,76 +569,78 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Submit Button -->
-                        <div class="col mt-3 d-flex justify-content-end">
-                            <button class="btn btn-primary" id="btnCreateUserRole">Create Role</button>
+                            <!-- Submit Button -->
+                            <div class="row">
+                                <div class="col-12 mt-3 d-flex justify-content-end">
+                                    <button class="btn btn-primary" id="btnCreateUserRole">Create Role</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    function toggleSubPermissions(mainCheckbox, subPermissionIds) {
-        const subMenuCheckboxes = document.querySelectorAll(subPermissionIds);
-        subMenuCheckboxes.forEach(checkbox => {
-            checkbox.checked = mainCheckbox.checked;
-        });
-    }
+    <script>
+        function toggleSubPermissions(mainCheckbox, subPermissionIds) {
+            const subMenuCheckboxes = document.querySelectorAll(subPermissionIds);
+            subMenuCheckboxes.forEach(checkbox => {
+                checkbox.checked = mainCheckbox.checked;
+            });
+        }
 
-    function memberCheck(memberCheckBox) {
-        toggleSubPermissions(memberCheckBox,
-            '#addMember, #viewMember, #ManageMember, #ManageMemberEdit, #ManageMemberDelete');
-    }
+        function memberCheck(memberCheckBox) {
+            toggleSubPermissions(memberCheckBox,
+                '#addMember, #viewMember, #ManageMember, #ManageMemberEdit, #ManageMemberDelete');
+        }
 
-    function divisionCheck(divisionCheckBox) {
-        toggleSubPermissions(divisionCheckBox, '#divisionByGn, #DivisionByVillage');
-    }
+        function divisionCheck(divisionCheckBox) {
+            toggleSubPermissions(divisionCheckBox, '#divisionByGn, #DivisionByVillage');
+        }
 
-    function accountCheck(accountCheckBox) {
-        toggleSubPermissions(accountCheckBox,
-            '#addAccount, #viewAccount, #ManageAccount, #ManageAccountEdit, #ManageAccountDelete');
-    }
+        function accountCheck(accountCheckBox) {
+            toggleSubPermissions(accountCheckBox,
+                '#addAccount, #viewAccount, #ManageAccount, #ManageAccountEdit, #ManageAccountDelete');
+        }
 
-    function loanCheck(loanCheckBox) {
-        toggleSubPermissions(loanCheckBox,
-            '#ManageLoanRquest,#addLoan, #loanCalculator, #loanProduct, #ManageLoan, #ManageLoanEdit, #ManageLoanDelete'
-        );
-    }
+        function loanCheck(loanCheckBox) {
+            toggleSubPermissions(loanCheckBox,
+                '#ManageLoanRquest,#addLoan, #loanCalculator, #loanProduct, #ManageLoan, #ManageLoanEdit, #ManageLoanDelete'
+            );
+        }
 
-    function savingsCheck(savingsCheckBox) {
-        toggleSubPermissions(savingsCheckBox,
-            '#savingsSettings,#addSavings, #viewSavings, #ManageSavings, #ManageSavingsEdit, #ManageSavingsDelete');
-    }
+        function savingsCheck(savingsCheckBox) {
+            toggleSubPermissions(savingsCheckBox,
+                '#savingsSettings,#addSavings, #viewSavings, #ManageSavings, #ManageSavingsEdit, #ManageSavingsDelete');
+        }
 
-    function deathCheck(deathCheckBox) {
-        toggleSubPermissions(deathCheckBox,
-            '#addDeath, #viewDeath, #ManageDeath, #ManageDeathEdit, #ManageDeathDelete');
-    }
+        function deathCheck(deathCheckBox) {
+            toggleSubPermissions(deathCheckBox,
+                '#addDeath, #viewDeath, #ManageDeath, #ManageDeathEdit, #ManageDeathDelete');
+        }
 
-    function repaymentCheck(repaymentCheckBox) {
-        toggleSubPermissions(repaymentCheckBox, '#directSavings, #loanRepayment, #openingBalance');
+        function repaymentCheck(repaymentCheckBox) {
+            toggleSubPermissions(repaymentCheckBox, '#directSavings, #loanRepayment, #openingBalance');
 
-    }
+        }
 
-    function meetingsCheck(meetingsCheckBox) {
-        toggleSubPermissions(meetingsCheckBox,
-            '#addMeetings, #viewMeetings, #ManageMeetings, #ManageMeetingsEdit, #ManageMeetingsDelete');
-    }
+        function meetingsCheck(meetingsCheckBox) {
+            toggleSubPermissions(meetingsCheckBox,
+                '#addMeetings, #viewMeetings, #ManageMeetings, #ManageMeetingsEdit, #ManageMeetingsDelete');
+        }
 
-    function reportCheck(reportCheckBox) {
-        toggleSubPermissions(reportCheckBox, '#openingBalanceReport');
-    }
+        function reportCheck(reportCheckBox) {
+            toggleSubPermissions(reportCheckBox, '#openingBalanceReport');
+        }
 
-    function userManageCheck(userManageCheckBox) {
-        toggleSubPermissions(userManageCheckBox, '#addUsers, #manageUsers, #userRole');
-    }
+        function userManageCheck(userManageCheckBox) {
+            toggleSubPermissions(userManageCheckBox, '#addUsers, #manageUsers, #userRole');
+        }
 
-    function settingsCheck(settingsCheckBox) {
-        toggleSubPermissions(settingsCheckBox, '#manage', '#activityLog');
-    }
-</script>
+        function settingsCheck(settingsCheckBox) {
+            toggleSubPermissions(settingsCheckBox, '#manage', '#activityLog');
+        }
+    </script>
