@@ -16,19 +16,34 @@
                                     <th>Division</th>
                                     <th>Village</th>
                                     <th>Small Group</th>
-                                    <th>No of Members</th>
-                                    <th>Total Savings</th>
-                                    <th>Total Death Subscription</th>
-                                    <th>Total Death Donation</th>
-                                    <th>Total Other Income</th>
-                                    <th>Loan Capital</th>
-                                    <th>Entry Fees</th>
-                                    <th>Total Interest</th>
-                                    <th>Grand Total</th>
+                                    <th>Title</th>
+                                    <th> Date</th>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                    <th>Resource Person</th>
+                                    <th>Position</th>
+                                    <th>Contact No</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @php
+                                    $count = 1;
+                                @endphp
+                                @foreach ($getMeeting as $meeting)
+                                <tr>
+                                    <td>{{ $count++ }}</td>
+                                    <td>{{ $meeting->divisionName }}</td>
+                                    <td>{{ $meeting->villageName }}</td>
+                                    <td>{{ $meeting->smallGroupName }}</td>
+                                    <td>{{ $meeting->meeting_title }}</td>
+                                    <td>{{ $meeting->meeting_date }}</td>
+                                    <td>{{ $meeting->meeting_time }}</td>
+                                    <td>{{ $meeting->meeting_type }}</td>
+                                    <td>{{ $meeting->full_name }}</td>
+                                    <td>{{ $meeting->resource_position }}</td>
+                                    <td>{{ $meeting->resource_contact_no }}</td>
+                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

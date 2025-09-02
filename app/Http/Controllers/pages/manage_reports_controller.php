@@ -11,6 +11,7 @@ use App\Models\loan;
 use App\Models\loanpurpose;
 use App\Models\loanrepayment;
 use App\Models\loanschedule;
+use App\Models\Meeting;
 use App\Models\member;
 use App\Models\otherincome;
 use App\Models\profession;
@@ -44,8 +45,20 @@ class manage_reports_controller extends Controller
         $getLoanRepaymentData = loanschedule::all();
         $getDeathSubscription = deathsubscription::all();
         $getDeathDonation = deathdonation::all();
+      $getMeeting = DB::table('meetings')
+            ->leftJoin('resourcepeople', 'meetings.resource_person', '=', 'resourcepeople.id')
+            ->leftJoin('divisions', 'meetings.division_id', '=', 'divisions.id')
+            ->leftJoin('villages', 'meetings.village_id', '=', 'villages.id')
+            ->leftJoin('smallgroups', 'meetings.small_group_id', '=', 'smallgroups.id')
+            ->select(
+                'meetings.*',
+                'resourcepeople.full_name',
+                'divisions.divisionName',
+                'villages.villageName',
+                'smallgroups.smallGroupName'
+            )->get();
 
-        return view('pages.permission.reports.meeting_report_per', compact( 'getUserRole', 'getSmallGroup', 'getVillage', 'getDivision', 'getMember', 'getLoansData', 'getAllMemberData', 'getSavingData', 'getLoanRepaymentData', 'getDeathSubscription', 'getDeathDonation'));
+        return view('pages.permission.reports.meeting_report_per', compact('getMeeting', 'getUserRole', 'getSmallGroup', 'getVillage', 'getDivision', 'getMember', 'getLoansData', 'getAllMemberData', 'getSavingData', 'getLoanRepaymentData', 'getDeathSubscription', 'getDeathDonation'));
     }
 
     function viewMemberSavingReport($id)
