@@ -1,4 +1,18 @@
 
+
+$(document).on("click", ".btnEditSubProfession", function () {
+    let subProId = $(this).data("id");
+    let subProName = $(this).data("name");
+    let mainProId = $(this).data("proid");
+
+    $("#txtSubProId").val(subProId);
+    $("#txtEditSubProName").val(subProName);
+    $("#txtMainProId").val(mainProId);
+
+    $("#updateSubProfessionModal").modal("show");
+});
+
+
 //Create Profeesion
 $('body').on('click', '#btnCreateProfession', function(){
      $("#loader").show();

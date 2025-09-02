@@ -89,9 +89,11 @@ Route::get('/smallgroup_details/{id}', [manage_division_controller::class, 'smal
 
 Route::post('/createdivisiondata', [add_division_controller::class, 'createdivisiondata'])->middleware('auth');
 Route::post('/createvillagedata', [add_division_controller::class, 'createvillagedata'])->middleware('auth');
+Route::post('/updatevillagedata', [add_division_controller::class, 'updatevillagedata'])->middleware('auth');
 Route::post('/update-division-data', [add_division_controller::class, 'updateDivisionData'])->middleware('auth');
 Route::post('/createGnDivisiondata', [manage_division_controller::class, 'creategnDivisiondata'])->middleware('auth');
 Route::post('/createsmallgroupdata', [add_division_controller::class, 'createsmallgroupdata'])->middleware('auth');
+Route::post('/updatesmallgroupdata', [add_division_controller::class, 'updatesmallgroupdata'])->middleware('auth');
 
 Route::post('/delete-division-data', [add_division_controller::class, 'deleteDivision']);
 

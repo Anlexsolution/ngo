@@ -126,10 +126,13 @@
                                                 <i class="ti ti-dots-vertical"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item text-black" href="#"><i
-                                                        class="ti ti-edit me-1"></i> Edit</a>
-                                                <a class="dropdown-item text-danger" href="#"><i
-                                                        class="ti ti-trash me-1"></i> Delete</a>
+                                                <a class="dropdown-item text-black btnEditSmallGroup"
+                                                    data-id="{{ $smallGroup->id }}"
+                                                    data-division="{{ $smallGroup->divisionId }}"
+                                                    data-village="{{ $smallGroup->villageId }}"
+                                                    data-name="{{ $smallGroup->smallGroupName }}">
+                                                    <i class="ti ti-edit me-1"></i> Edit
+                                                </a>
                                             </div>
                                         </div>
                                     </td>
@@ -143,7 +146,52 @@
     </div>
 </div>
 
+{{-- Edit Small Group Modal --}}
+<div class="modal fade" id="smallGroupEditModal" tabindex="-1" aria-labelledby="editSmallGroupLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSmallGroupLabel">Edit Small Group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editSmallGroupId">
+
+                <div class="mb-3">
+                    <label for="editDivisionId" class="form-label fw-bold">Select Division</label>
+                    <select id="editDivisionId" class="form-control">
+                        <option value="">Select Division</option>
+                        @foreach ($getDivision as $division)
+                            <option value="{{ $division->id }}">{{ $division->divisionName }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editVillageId" class="form-label fw-bold">Select Village</label>
+                    <select id="editVillageId" class="form-control">
+                        <option value="">Select Village</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editSmallGroupName" class="form-label fw-bold">Small Group Name</label>
+                    <input type="text" class="form-control" id="editSmallGroupName"
+                        placeholder="Small Group Name">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="updateSmallGroupBtn">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
+
     document.getElementById('divisionId').addEventListener('change', function() {
         var divisionId = this.value;
         console.log(divisionId)

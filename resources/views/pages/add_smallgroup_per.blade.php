@@ -48,6 +48,9 @@
                 @include('source.pagefooter')
             </div>
         </div>
+        {{-- CSRF Token Get --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- CSRF Token Get --}}
         <div class="layout-overlay layout-menu-toggle"></div>
         <div class="drag-target"></div>
     </div>

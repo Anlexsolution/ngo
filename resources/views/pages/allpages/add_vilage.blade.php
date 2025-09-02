@@ -85,8 +85,13 @@
                                                         <i class="ti ti-dots-vertical"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item text-black" href="#"><i
-                                                                class="ti ti-edit me-1"></i> Edit</a>
+                                                        <a class="dropdown-item text-black btnEditVillage"
+                                                            data-id="{{ $village->id }}"
+                                                            data-name="{{ $village->villageName }}"
+                                                            data-division="{{ $village->divisionId }}">
+                                                            <i class="ti ti-edit me-1"></i> Edit
+                                                        </a>
+
                                                         <a class="dropdown-item text-danger btnDeleteVillageModal"
                                                             data-id="{{ $village->id }}"><i
                                                                 class="ti ti-trash me-1"></i> Delete</a>
@@ -125,3 +130,39 @@
     </div>
 </div>
 {{-- delete village modal --}}
+
+{{-- edit village modal --}}
+<div class="modal fade" id="villageEditModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Village</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editVillageId">
+
+                <div class="mb-3">
+                    <label for="editDivisionId" class="form-label fw-bold">Select Division</label>
+                    <select name="editDivisionId" id="editDivisionId" class="selectize">
+                        @foreach ($getDivision as $division)
+                            <option value="{{ $division->id }}">{{ $division->divisionName }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editVillageName" class="form-label fw-bold">Village Name</label>
+                    <input id="editVillageName" name="editVillageName" class="form-control"
+                        type="text" placeholder="Village Name" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="updateVillageBtn">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- edit village modal --}}
+

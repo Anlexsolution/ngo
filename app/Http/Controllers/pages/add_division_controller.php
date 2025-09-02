@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\pages;
 
+use App\Helpers\UpdateHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\userRole;
@@ -81,6 +82,41 @@ class add_division_controller extends Controller
         return view('pages.add_vilage_per', ['getUserRole' => $getUserRole, 'getDivision' => $getDivision, 'getVillage' => $getVillage, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
+      public function updatevillagedata(Request $request)
+    {
+
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $editVillageId = $request->input('editVillageId');
+            $editDivisionId = $request->input('editDivisionId');
+            $editVillageName = $request->input('editVillageName');
+
+            $upData = [
+                'divisionId' => $editDivisionId,
+                'villageName' => $editVillageName
+            ];
+
+            UpdateHelper::updateRecord('villages', $editVillageId, $upData);
+
+            return response()->json(['success' => true, 'code' => 200]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
     public function createvillagedata(Request $request)
     {
 
@@ -131,6 +167,43 @@ class add_division_controller extends Controller
     {
         $gnDivision = gndivision::where('divisionId', $divisionId)->get();
         return response()->json($gnDivision);
+    }
+
+          public function updatesmallgroupdata(Request $request)
+    {
+
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $editSmallGroupId = $request->input('editSmallGroupId');
+            $editDivisionId = $request->input('editDivisionId');
+            $editVillageId = $request->input('editVillageId');
+            $editSmallGroupName = $request->input('editSmallGroupName');
+
+            $upData = [
+                'divisionId' => $editDivisionId,
+                'villageId' => $editVillageId,
+                'smallGroupName' => $editSmallGroupName
+            ];
+
+            UpdateHelper::updateRecord('smallgroups', $editSmallGroupId, $upData);
+
+            return response()->json(['success' => true, 'code' => 200]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
     }
 
     public function createsmallgroupdata(Request $request)

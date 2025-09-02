@@ -36,10 +36,21 @@
                                                 <td>{{ $pro->name }}</td>
                                                 <td>
                                                     @foreach ($getAllSubProfession as $data)
-                                                    @if ($data->professionId == $pro->id)
-                                                    {{ $data->name }} <br>
-                                                    @endif
+                                                        @if ($data->professionId == $pro->id)
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
+                                                                <span>{{ $data->name }}</span>
+                                                                <button
+                                                                    class="btn btn-warning btn-sm btnEditSubProfession"
+                                                                    data-id="{{ $data->id }}"
+                                                                    data-name="{{ $data->name }}"
+                                                                    data-proid="{{ $pro->id }}">
+                                                                    <i class="ti ti-edit"></i>
+                                                                </button>
+                                                            </div>
+                                                        @endif
                                                     @endforeach
+
                                                 </td>
                                                 <td class="d-flex justify-content-center">
                                                     <button class="btn btn-success btn-sm me-2 btnUpdateProfession"
@@ -175,3 +186,32 @@
     </div>
 </div>
 {{-- delete profession modal --}}
+
+<!-- update Sub Profession Modal -->
+<div class="modal fade" id="updateSubProfessionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                <div class="text-center mb-6">
+                    <h4 class="mb-2">Update Sub Profession</h4>
+                    <p>Update a member sub profession</p>
+                </div>
+                <input type="hidden" id="txtSubProId">
+                <input type="hidden" id="txtMainProId">
+                <div class="col-12 mb-4">
+                    <label class="form-label" for="txtEditSubProName">Sub Profession Name</label>
+                    <input type="text" id="txtEditSubProName" class="form-control"
+                        placeholder="Sub Profession Name" autofocus />
+                </div>
+                <div class="col-12 text-center demo-vertical-spacing">
+                    <button class="btn btn-primary me-4" id="btnUpdateSubProfession">Update Sub Profession</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Discard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ update Sub Profession Modal -->

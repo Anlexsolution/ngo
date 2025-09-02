@@ -419,32 +419,150 @@ pages-custom-js/create_loan_request.js?v=<?= date('His') ?>"></script>
 @if ($pageName == 'view_loan_details')
 <script src="../../pages-custom-js/view_loan_details.js?v=<?= date('His') ?>"></script> @endif
 
-<script>
+@if ($pageName == 'create_smallgroup')
+<script src="../../pages-custom-js/manage_smallgroup.js?v=<?= date('His') ?>"></script> @endif
 
+<script>
     //Handle Alert
-function handleResponse(response) {
-    if (response.code == 200) {
-        let message = response.success;
-        showAlertSuccess(" Success", message); }else if (response.code==201) { let message=response.success; let
-    transectionId=response.transectionId; showAlertSuccessTransection("Success", message, transectionId) }else if
-    (response.code==204) { let message=response.success; let transectionId=response.transId;
-    showAlertSuccessTransectionRepay("Success", message, transectionId) }else if (response.code==202) { let
-    message=response.success; let redirectUrl=response.redirectUrl; showAlertSuccessRedirect("Success", message,
-    redirectUrl); } else{ let message=response.error || "Something went wrong. Please try again." ; showAlert("Error!",
-    message); } } function showAlert(title, content) { $.alert({ title: title, content: content, type: "red" ,
-    theme: 'modern' , buttons: { okay: { text: "Okay" , btnClass: "btn-red" , action: function () { $("#loader").hide();
-    }, }, }, }); } function showAlertSuccessRedirect(title, content, url) { $.alert({ title: title, content: content,
-    type: "green" , icon: "fa fa-check-circle" , theme: 'modern' , buttons: { okay: { text: "Okay" ,
-    btnClass: "btn-green" , action: function() { location.href=url; $("#page-loader").hide(); }, }, }, }); } function
-    showAlertSuccessTransection(title, content, transectionId) { $.alert({ title: title, content: content, type: "green"
-    , theme: 'modern' , buttons: { okay: { text: "Okay" , btnClass: "btn-green" , action: function () {
-    location.reload(); $("#loader").hide(); }, }, print: { text: "Print" , btnClass: "btn-blue" , action: function () {
-    window.open(`{{ route('direct_saving_receipt', ':id') }}`.replace(':id', transectionId)); location.reload();
-    $("#loader").hide(); }, }, }, }); } function showAlertSuccessTransectionRepay(title, content, transectionId) {
-    $.alert({ title: title, content: content, type: "green" , theme: 'modern' , buttons: { okay: { text: "Okay" ,
-    btnClass: "btn-green" , action: function () { location.reload(); $("#loader").hide(); }, }, print: { text: "Print" ,
-    btnClass: "btn-blue" , action: function () { window.open(`{{ route('repayment_receipt', ':id') }}`.replace(':id',
-    transectionId)); location.reload(); $("#loader").hide(); }, }, }, }); } function showAlertSuccess(title, content) {
-    $.alert({ title: title, content: content, type: "green" , theme: 'modern' , buttons: { okay: { text: "Okay" ,
-    btnClass: "btn-green" , action: function () { location.reload(); $("#loader").hide(); }, }, }, }); } //Handle Alert
-    </script>
+    function handleResponse(response) {
+        if (response.code == 200) {
+            let message = response.success;
+            showAlertSuccess(" Success", message);
+        } else if (response.code == 201) {
+            let message = response.success;
+            let
+                transectionId = response.transectionId;
+            showAlertSuccessTransection("Success", message, transectionId)
+        } else if (response.code == 204) {
+            let message = response.success;
+            let transectionId = response.transId;
+            showAlertSuccessTransectionRepay("Success", message, transectionId)
+        } else if (response.code == 202) {
+            let
+                message = response.success;
+            let redirectUrl = response.redirectUrl;
+            showAlertSuccessRedirect("Success", message,
+                redirectUrl);
+        } else {
+            let message = response.error || "Something went wrong. Please try again.";
+            showAlert("Error!",
+                message);
+        }
+    }
+
+    function showAlert(title, content) {
+        $.alert({
+            title: title,
+            content: content,
+            type: "red",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                    action: function() {
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+    }
+
+    function showAlertSuccessRedirect(title, content, url) {
+        $.alert({
+            title: title,
+            content: content,
+            type: "green",
+            icon: "fa fa-check-circle",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-green",
+                    action: function() {
+                        location.href = url;
+                        $("#page-loader").hide();
+                    },
+                },
+            },
+        });
+    }
+
+    function
+    showAlertSuccessTransection(title, content, transectionId) {
+        $.alert({
+            title: title,
+            content: content,
+            type: "green",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-green",
+                    action: function() {
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+                print: {
+                    text: "Print",
+                    btnClass: "btn-blue",
+                    action: function() {
+                        window.open(`{{ route('direct_saving_receipt', ':id') }}`.replace(':id',
+                            transectionId));
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+    }
+
+    function showAlertSuccessTransectionRepay(title, content, transectionId) {
+        $.alert({
+            title: title,
+            content: content,
+            type: "green",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-green",
+                    action: function() {
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+                print: {
+                    text: "Print",
+                    btnClass: "btn-blue",
+                    action: function() {
+                        window.open(`{{ route('repayment_receipt', ':id') }}`.replace(':id',
+                            transectionId));
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+    }
+
+    function showAlertSuccess(title, content) {
+        $.alert({
+            title: title,
+            content: content,
+            type: "green",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-green",
+                    action: function() {
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+    } //Handle Alert
+</script>
