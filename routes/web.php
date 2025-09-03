@@ -221,7 +221,9 @@ Route::post('/calculate-loan-amount', [loan_controller::class, 'calculateLoanAmo
 Route::post('/get-member-loan-data', [loan_controller::class, 'getMemberLoanData'])->middleware('auth');
 Route::post('/get-loan-repayment-data', [loan_controller::class, 'getLoanRepaymentData'])->middleware('auth');
 Route::post('/add-approval-settings-data', [loan_product_controller::class, 'createApprovalSettings'])->middleware('auth');
+Route::post('/update-approval-settings-data', [loan_product_controller::class, 'updateApprovalSettings'])->middleware('auth');
 Route::post('/add-sub-category-data', [loan_product_controller::class, 'createSubCatData'])->middleware('auth');
+Route::post('/update-sub-category-data', [loan_product_controller::class, 'updateSubCatData'])->middleware('auth');
 Route::post('/pay-repayment-data', [loan_product_controller::class, 'payRepaymentData'])->middleware('auth');
 Route::post('/import-repayment-data', [loan_product_controller::class, 'importRepaymentData'])->middleware('auth');
 Route::post('/get-loan-document-data', [loan_product_controller::class, 'loanDocumentData'])->middleware('auth');
@@ -309,7 +311,9 @@ Route::get('/manage_relative_settings', [manage_settings_controller::class, 'rel
 
 Route::post('/add-profession-data', [manage_settings_controller::class, 'addProfession'])->middleware('auth');
 Route::post('/add-sub-profession-data', [manage_settings_controller::class, 'addSubProfession'])->middleware('auth');
+Route::post('/update-sub-profession-data', [manage_settings_controller::class, 'updateSubProfession'])->middleware('auth');
 Route::post('/add-relative-data', [manage_settings_controller::class, 'addRelative'])->middleware('auth');
+Route::post('/update-relative-data', [manage_settings_controller::class, 'updateRelative'])->middleware('auth');
 Route::post('/add-meeting-category-data', [manage_settings_controller::class, 'addMeetingCategory'])->middleware('auth');
 Route::post('/update-profession-data', [manage_settings_controller::class, 'updateProfession'])->middleware('auth');
 Route::post('/update-meeting-category-data', [manage_settings_controller::class, 'updateMeetingCategory'])->middleware('auth');
@@ -319,7 +323,9 @@ Route::post('/add-interest-settings-data', [manage_settings_controller::class, '
 Route::post('/add-loan-document-data', [manage_settings_controller::class, 'loanDocData'])->middleware('auth');
 Route::get('/manage_qualification_settings', [manage_settings_controller::class, 'manage_qualification_settings'])->middleware('auth');
 Route::post('/add-qualification-data', [manage_settings_controller::class, 'addQualificationData'])->middleware('auth');
+Route::post('/update-qualification-data', [manage_settings_controller::class, 'updateQualificationData'])->middleware('auth');
 Route::post('/add-sub-qualification-data', [manage_settings_controller::class, 'addSubQualificationData'])->middleware('auth');
+Route::post('/update-sub-qualification-data', [manage_settings_controller::class, 'updateSubQualificationData'])->middleware('auth');
 //Manage Settings
 
 //manage reports

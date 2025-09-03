@@ -5,6 +5,19 @@ $(document).ready(function(){
 });
 
 
+$(document).on("click", ".btnUpdateSubCategory", function () {
+    let id = $(this).data("id");
+    let name = $(this).data("name");
+
+    $("#txtSubCatIdUpdate").val(id);
+    $("#txtUpdateSubCat").val(name);
+
+    $("#updateSubCategoryModal").modal("show");
+});
+
+
+
+
 $('body').on('change', '#txtLoanPurpose', function () {
     $("#loader").show();
     var formData = new FormData();
@@ -376,6 +389,74 @@ function makeAjaxRequestSubCat(formData) {
    });
 }
 ////Create Sub Category
+
+
+////Update Sub Category
+$('body').on('click', '#btnUpdateSubCat', function(){
+    $("#loader").show();
+   var formData = new FormData();
+
+   // Get the CSRF token
+   var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+   formData.append("_token", CSRF_TOKEN);
+   // Get the CSRF token
+
+   var txtUpdateSubCat = $('#txtUpdateSubCat').val();
+   formData.append('txtUpdateSubCat', txtUpdateSubCat);
+
+   var txtSubCatIdUpdate = $('#txtSubCatIdUpdate').val();
+   formData.append('txtSubCatIdUpdate', txtSubCatIdUpdate);
+
+   if(txtUpdateSubCat == ''){
+       $.alert({
+           title: "Error!",
+           content: "Please fill the sub category name",
+           type: "red",
+           theme: 'modern',
+           buttons: {
+               okay: {
+                   text: "Okay",
+                   btnClass: "btn-red",
+                   action: function () {
+                       $("#loader").hide();
+                   },
+               },
+           },
+       });
+       return false;
+   }
+
+
+   getUserLocation().then(({ latitude, longitude }) => {
+       formData.append('latitude', latitude);
+       formData.append('longitude', longitude);
+       makeAjaxRequestSubCatUpdate(formData);
+   });
+
+});
+
+function makeAjaxRequestSubCatUpdate(formData) {
+   $.ajax({
+       url: "/update-sub-category-data",
+       type: "POST",
+       data: formData,
+       processData: false,
+       contentType: false,
+       beforeSend: function () {
+           $("#loader").show();
+       },
+       success: function (response) {
+           $("#loader").hide();
+           handleResponse(response);
+       },
+       error: function (xhr, status, error) {
+           $("#loader").hide();
+           console.error("Error:", error);
+           showAlert("Error!", "Something went wrong!");
+       },
+   });
+}
+////Update Sub Category
 
 $('body').on('keyup', '#txtPricipal', function(){
     $("#loader").show();

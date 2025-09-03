@@ -36,13 +36,24 @@
                                             <td>
                                                 @foreach ($getSubQualification as $data)
                                                     @if ($data->qualificationId == $pro->id)
-                                                        {{ $data->subQualificationName }} <br>
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <span>{{ $data->subQualificationName }}</span>
+                                                            <button
+                                                                class="btn btn-sm btn-outline-success ms-2 p-1 btnUpdateSubQualification"
+                                                                data-id="{{ $data->id }}"
+                                                                data-name="{{ $data->subQualificationName }}"
+                                                                data-mainid="{{ $pro->id }}">
+                                                                  <i class="ti ti-edit" style="font-size:12px;"></i>
+                                                            </button>
+                                                        </div>
                                                     @endif
                                                 @endforeach
                                             </td>
+                                            </td>
                                             <td class="d-flex justify-content-center">
                                                 <button class="btn btn-success btn-sm me-2 btnUpdateQualification"
-                                                    data-name="{{ $pro->qualificationName }}" data-id="{{ $pro->id }}">
+                                                    data-name="{{ $pro->qualificationName }}"
+                                                    data-id="{{ $pro->id }}">
                                                     <i class="ti ti-edit"></i> Edit
                                                 </button>
 
@@ -77,8 +88,8 @@
                 </div>
                 <div class="col-12 mb-4">
                     <label class="form-label" for="modalProfessionName">Qualification Name</label>
-                    <input type="text" id="txtQualificationName" class="form-control" placeholder="Qualification Name"
-                        autofocus />
+                    <input type="text" id="txtQualificationName" class="form-control"
+                        placeholder="Qualification Name" autofocus />
                 </div>
 
                 <div class="col-12 text-center demo-vertical-spacing">
@@ -101,17 +112,18 @@
                 <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="text-center mb-6">
                     <h4 class="mb-2">Add New Sub Qualification</h4>
-                    <p>Create  Sub Qualification</p>
+                    <p>Create Sub Qualification</p>
                 </div>
                 <input type="hidden" id="txtQualificationId">
                 <div class="col-12 mb-4">
                     <label class="form-label" for="modalProfessionName">Sub Qualification Name</label>
-                    <input type="text" id="txtSubQualificationName" class="form-control" placeholder="Qualification Name"
-                        autofocus />
+                    <input type="text" id="txtSubQualificationName" class="form-control"
+                        placeholder="Qualification Name" autofocus />
                 </div>
 
                 <div class="col-12 text-center demo-vertical-spacing">
-                    <button class="btn btn-primary me-4" id="btnCreateSubQualification">Create sub Qualification</button>
+                    <button class="btn btn-primary me-4" id="btnCreateSubQualification">Create sub
+                        Qualification</button>
                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
                         Discard
                     </button>
@@ -173,3 +185,36 @@
     </div>
 </div>
 {{-- delete profession modal --}}
+
+
+<div class="modal fade" id="updateSubQualificationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                <div class="text-center mb-6">
+                    <h4 class="mb-2">Update Sub Qualification</h4>
+                    <p>Update a Sub Qualification</p>
+                </div>
+                <input type="hidden" id="txtSubQualificationId">
+                <input type="hidden" id="txtMainQualificationId">
+                <div class="col-12 mb-4">
+                    <label class="form-label">Sub Qualification Name</label>
+                    <input type="text" id="txtUpdateSubQualificationName" class="form-control"
+                        placeholder="Sub Qualification Name" autofocus />
+                </div>
+
+                <div class="col-12 text-center demo-vertical-spacing">
+                    <button class="btn btn-primary me-4" id="btnUpdateSubQualification">
+                        Update Sub Qualification
+                    </button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        Discard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

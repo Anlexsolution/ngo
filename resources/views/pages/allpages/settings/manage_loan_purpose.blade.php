@@ -33,24 +33,32 @@
                                         $count = 1;
                                     @endphp
                                     @foreach ($getPurpose as $pro)
-                                            <tr>
-                                                <td>{{ $count++ }}</td>
-                                                <td>{{ $pro->name }}</td>
-                                                <td>
-                                                    @foreach ($getLoanPurposeSubCat as $sub)
-                                                        @if ($sub->mainCatId == $pro->id)
-                                                            {{ $sub->name }} <br>
-                                                        @endif
-                                                    @endforeach
-                                                </td>
-                                                <td class="d-flex justify-content-center">
-                                                    <button class="btn btn-success btn-sm me-2 btnUpdateMainCategory"
-                                                        data-name ="{{ $pro->name }}"
-                                                        data-id="{{ $pro->id }}"><i class="ti ti-edit"></i>
-                                                        Edit</button>
+                                        <tr>
+                                            <td>{{ $count++ }}</td>
+                                            <td>{{ $pro->name }}</td>
+                                            <td>
+                                                @foreach ($getLoanPurposeSubCat as $sub)
+                                                    @if ($sub->mainCatId == $pro->id)
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <span>{{ $sub->name }}</span>
+                                                            <button
+                                                                class="btn btn-sm btn-outline-success ms-2 p-1 btnUpdateSubCategory"
+                                                                data-id="{{ $sub->id }}"
+                                                                data-name="{{ $sub->name }}">
+                                                                <i class="ti ti-edit" style="font-size:12px;"></i>
+                                                            </button>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td class="d-flex justify-content-center">
+                                                <button class="btn btn-success btn-sm me-2 btnUpdateMainCategory"
+                                                    data-name ="{{ $pro->name }}" data-id="{{ $pro->id }}"><i
+                                                        class="ti ti-edit"></i>
+                                                    Edit</button>
 
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -106,7 +114,7 @@
                     <select class="selectize" id="txtMainCatId">
                         <option value="">---Select----</option>
                         @foreach ($getPurpose as $pro)
-                            <option value="{{$pro->id}}">{{$pro->name}}</option>
+                            <option value="{{ $pro->id }}">{{ $pro->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -134,7 +142,8 @@
     <div class="modal-dialog modal-dialog-centered modal-simple">
         <div class="modal-content">
             <div class="modal-body">
-                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
                 <div class="text-center mb-6">
                     <h4 class="mb-2">Update Main Category</h4>
                     <p>Update a Main Category</p>
@@ -142,8 +151,8 @@
                 <input type="hidden" id="txtMainCatIdUpdate">
                 <div class="col-12 mb-4">
                     <label class="form-label" for="modalProfessionName">Main Category</label>
-                    <input type="text" id="txtUpdateMainCat" class="form-control" placeholder="Main Category Name"
-                        autofocus />
+                    <input type="text" id="txtUpdateMainCat" class="form-control"
+                        placeholder="Main Category Name" autofocus />
                 </div>
 
                 <div class="col-12 text-center demo-vertical-spacing">
@@ -159,4 +168,32 @@
 </div>
 <!--/ update Permission Modal -->
 
+<!--/ update Sub Cat Modal -->
+<div class="modal fade" id="updateSubCategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-6">
+                    <h4 class="mb-2">Update Sub Category</h4>
+                    <p>Update the Sub Category name</p>
+                </div>
 
+                <input type="hidden" id="txtSubCatIdUpdate">
+
+                <div class="col-12 mb-4">
+                    <label class="form-label">Sub Category Name</label>
+                    <input type="text" id="txtUpdateSubCat" class="form-control" placeholder="Sub Category Name" />
+                </div>
+
+                <div class="col-12 text-center demo-vertical-spacing">
+                    <button class="btn btn-primary me-4" id="btnUpdateSubCat">Update Sub Category</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Discard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/ update Sub Cat Modal -->

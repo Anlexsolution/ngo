@@ -86,6 +86,57 @@ class manage_settings_controller extends Controller
         }
     }
 
+        function updateSubQualificationData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtUpdateSubQualificationName = $request->input('txtUpdateSubQualificationName');
+            $txtSubQualificationId = $request->input('txtSubQualificationId');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update new sub qualification: ' . $txtUpdateSubQualificationName;
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $table = 's_ubqualifications';
+            $data = [
+                'subQualificationName' => $txtUpdateSubQualificationName
+            ];
+            $result = UpdateHelper::updateRecord($table, $txtSubQualificationId ,$data);
+            if ($result === true) {
+                return response()->json(['success' => 'Update sub Qualification successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
     function addQualificationData(Request $request)
     {
         try {
@@ -118,6 +169,56 @@ class manage_settings_controller extends Controller
             $result = InsertHelper::insertRecord($table, $data);
             if ($result === true) {
                 return response()->json(['success' => 'Create Qualification successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+        function updateQualificationData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtproName = $request->input('txtproName');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update new qualification: ' . $txtproName;
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $table = 'qualifications';
+            $data = [
+                'qualificationName' => $txtproName
+            ];
+            $result = UpdateHelper::updateRecord($table, $request->input('txtProfessionId') ,$data);
+            if ($result === true) {
+                return response()->json(['success' => 'Update Qualification successfully', 'code' => 200]);
                 $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
             } else {
                 return response()->json(['error' => $result['error'], 'code' => 500]);
@@ -301,9 +402,10 @@ class manage_settings_controller extends Controller
     function relativeSettings()
     {
         $getLoansData = loan::all();
+         $getUserRole = userRole::all();
         $getAllMemberData = member::all();
         $getRelativeData = relative::all();
-        return view('pages.permission.settings.manage_relative_settings_per', ['getRelativeData' => $getRelativeData, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        return view('pages.permission.settings.manage_relative_settings_per', [ 'getUserRole' => $getUserRole, 'getRelativeData' => $getRelativeData, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function addRelative(Request $request)
@@ -339,6 +441,57 @@ class manage_settings_controller extends Controller
             $result = InsertHelper::insertRecord($table, $data);
             if ($result === true) {
                 return response()->json(['success' => 'Create Relative successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+
+        function updateRelative(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtRelativeName = $request->input('txtRelativeName');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update new relative: ' . $txtRelativeName;
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $table = 'relatives';
+            $data = [
+                'name' => $txtRelativeName
+            ];
+            $result = UpdateHelper::updateRecord($table, $request->input('txtRelativeId') ,$data);
+            if ($result === true) {
+                return response()->json(['success' => 'Update Relative successfully', 'code' => 200]);
                 $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
             } else {
                 return response()->json(['error' => $result['error'], 'code' => 500]);
@@ -449,6 +602,57 @@ class manage_settings_controller extends Controller
             $result = InsertHelper::insertRecord($table, $data);
             if ($result === true) {
                 return response()->json(['success' => 'Create Sub Profession successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+        function updateSubProfession(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtSubProId = $request->input('txtSubProId');
+            $txtEditSubProName = $request->input('txtEditSubProName');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update new Sub profession: ' . $txtEditSubProName;
+            $type = 'Update';
+            $className = 'bg-success';
+
+            $table = 'subprofessions';
+            $data = [
+                'name' => $txtEditSubProName
+            ];
+            $result = UpdateHelper::updateRecord($table, $txtSubProId ,$data);
+            if ($result === true) {
+                return response()->json(['success' => 'Updated Sub Profession successfully', 'code' => 200]);
                 $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
             } else {
                 return response()->json(['error' => $result['error'], 'code' => 500]);

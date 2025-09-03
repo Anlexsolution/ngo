@@ -143,6 +143,73 @@ function makeAjaxRequestSubPro(formData) {
 }
 ////Create Sub Profeesion
 
+
+//Update Sub Profeesion
+$('body').on('click', '#btnUpdateSubProfession', function(){
+     $("#loader").show();
+    var formData = new FormData();
+
+    // Get the CSRF token
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    formData.append("_token", CSRF_TOKEN);
+    // Get the CSRF token
+
+    var txtEditSubProName = $('#txtEditSubProName').val();
+    formData.append('txtEditSubProName', txtEditSubProName);
+
+    var txtSubProId = $('#txtSubProId').val();
+    formData.append('txtSubProId', txtSubProId);
+
+    if(txtEditSubProName == ''){
+        $.alert({
+            title: "Error!",
+            content: "Please fill the Sub profession name",
+            type: "red",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                    action: function () {
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+        return false;
+    }
+
+    getUserLocation().then(({ latitude, longitude }) => {
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
+        makeAjaxRequestSubProUpdate(formData);
+    });
+
+});
+
+function makeAjaxRequestSubProUpdate(formData) {
+    $.ajax({
+        url: "/update-sub-profession-data",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            $("#loader").show();
+        },
+        success: function (response) {
+            $("#loader").hide();
+            handleResponse(response);
+        },
+        error: function (xhr, status, error) {
+            $("#loader").hide();
+            console.error("Error:", error);
+            showAlert("Error!", "Something went wrong!");
+        },
+    });
+}
+////Update Sub Profeesion
+
 //open update modal
 $('body').on('click', '.btnUpdateProfession', function(){
     var professName = $(this).attr('data-name');

@@ -746,6 +746,59 @@ class loan_product_controller extends Controller
     }
 
 
+        function updateApprovalSettings(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update new approval: ' . $request->input('txtApprovalNameUpdate');
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $tableName = 'loanapprovalsettings';
+            $data = [
+                'name' => $request->input('txtApprovalNameUpdate'),
+                'minimum' => $request->input('txtMinAmountUpdate'),
+                'maximum' => $request->input('txtMaxAmountUpdate'),
+                'howManyApproval' => $request->input('txtHowManyApprovalUpdate')
+            ];
+
+            $result = UpdateHelper::updateRecord($tableName, $request->input('txtApprovalIdUpdate') ,$data);
+            if ($result === true) {
+                return response()->json(['success' => 'Update loan approval settings successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+
     function createSubCatData(Request $request)
     {
         try {
@@ -778,6 +831,55 @@ class loan_product_controller extends Controller
             $result = InsertHelper::insertRecord($tableName, $data);
             if ($result === true) {
                 return response()->json(['success' => 'Create loan purpose sub category successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+       function updateSubCatData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update new sub category: ' . $request->input('txtUpdateSubCat');
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $tableName = 'loanpurposesubs';
+            $data = [
+                'name' => $request->input('txtUpdateSubCat')
+            ];
+
+            $result = UpdateHelper::updateRecord($tableName, $request->input('txtSubCatIdUpdate') ,$data);
+            if ($result === true) {
+                return response()->json(['success' => 'Update loan purpose sub category successfully', 'code' => 200]);
                 $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
             } else {
                 return response()->json(['error' => $result['error'], 'code' => 500]);

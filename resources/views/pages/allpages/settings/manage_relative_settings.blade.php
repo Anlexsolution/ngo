@@ -21,7 +21,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Relative</th>
-                                        {{-- <th></th> --}}
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -32,12 +32,12 @@
                                             <tr>
                                                 <td>{{ $count++ }}</td>
                                                 <td>{{ $relative->name }}</td>
-                                                {{-- <td class="d-flex justify-content-center">
-                                                    <button class="btn btn-success btn-sm me-2 btnUpdateProfession"
-                                                        data-name ="{{ $pro->name }}"
-                                                        data-id="{{ $pro->id }}"><i class="ti ti-edit"></i>
+                                                <td class="d-flex justify-content-center">
+                                                    <button class="btn btn-success btn-sm me-2 btnUpdateRelative"
+                                                        data-name ="{{ $relative->name }}"
+                                                        data-id="{{ $relative->id }}"><i class="ti ti-edit"></i>
                                                         Edit</button>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                     @endforeach
                                 </tbody>
@@ -128,3 +128,31 @@
     </div>
 </div>
 {{-- delete profession modal --}}
+
+<!-- Update Relative Modal -->
+<div class="modal fade" id="updateRelativeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-6">
+                    <h4 class="mb-2">Update Relative</h4>
+                    <p>Update a relative</p>
+                </div>
+                <input type="hidden" id="txtRelativeId">
+                <div class="col-12 mb-4">
+                    <label class="form-label" for="txtRelativeName">Relative Name</label>
+                    <input type="text" id="txtRelativeName" class="form-control" placeholder="Relative Name" autofocus />
+                </div>
+
+                <div class="col-12 text-center demo-vertical-spacing">
+                    <button class="btn btn-primary me-4" id="btnUpdateRelative">Update Relative</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                        Discard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ Update Relative Modal -->

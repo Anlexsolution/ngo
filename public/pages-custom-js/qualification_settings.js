@@ -1,3 +1,26 @@
+
+    $(document).on("click", ".btnUpdateSubQualification", function () {
+        let id = $(this).data("id");
+        let name = $(this).data("name");
+        let mainid = $(this).data("mainid");
+
+        $("#txtSubQualificationId").val(id);
+        $("#txtMainQualificationId").val(mainid);
+        $("#txtUpdateSubQualificationName").val(name);
+
+        $("#updateSubQualificationModal").modal("show");
+    });
+
+        $(document).on("click", ".btnUpdateQualification", function () {
+        let id = $(this).data("id");
+        let name = $(this).data("name");
+
+        $("#txtProfessionId").val(id);
+        $("#txtproName").val(name);
+
+        $("#updateProfessionModal").modal("show");
+    });
+
 ////Create Main Qualification
 $('body').on('click', '#btnCreateQualification', function () {
     $("#loader").show();
@@ -60,6 +83,72 @@ function makeAjaxRequestQualification(formData) {
     });
 }
 ////Create Main Qualification
+
+////Update Main Qualification
+$('body').on('click', '#btnUpdateProfession', function () {
+    $("#loader").show();
+    var formData = new FormData();
+
+    // Get the CSRF token
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    formData.append("_token", CSRF_TOKEN);
+    // Get the CSRF token
+
+    var txtproName = $('#txtproName').val();
+    formData.append('txtproName', txtproName);
+
+        var txtProfessionId = $('#txtProfessionId').val();
+    formData.append('txtProfessionId', txtProfessionId);
+
+    if (txtproName == '') {
+        $.alert({
+            title: "Error!",
+            content: "Please fill the Qualification name",
+            type: "red",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                    action: function () {
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+        return false;
+    }
+
+    getUserLocation().then(({ latitude, longitude }) => {
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
+        makeAjaxRequestQualificationUpdate(formData);
+    });
+
+});
+
+function makeAjaxRequestQualificationUpdate(formData) {
+    $.ajax({
+        url: "/update-qualification-data",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            $("#loader").show();
+        },
+        success: function (response) {
+            $("#loader").hide();
+            handleResponse(response);
+        },
+        error: function (xhr, status, error) {
+            $("#loader").hide();
+            console.error("Error:", error);
+            showAlert("Error!", "Something went wrong!");
+        },
+    });
+}
+////Update Main Qualification
 
 
 ///Show Sub Modal
@@ -137,3 +226,70 @@ function makeAjaxRequestSubQualification(formData) {
     });
 }
 ///create Sub Qualification
+
+
+///Update Sub Qualification
+$('body').on('click', '#btnUpdateSubQualification', function () {
+    $("#loader").show();
+    var formData = new FormData();
+
+    // Get the CSRF token
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+    formData.append("_token", CSRF_TOKEN);
+    // Get the CSRF token
+
+    var txtSubQualificationId = $('#txtSubQualificationId').val();
+    formData.append('txtSubQualificationId', txtSubQualificationId);
+
+    var txtUpdateSubQualificationName = $('#txtUpdateSubQualificationName').val();
+    formData.append('txtUpdateSubQualificationName', txtUpdateSubQualificationName);
+
+    if (txtUpdateSubQualificationName == '') {
+        $.alert({
+            title: "Error!",
+            content: "Please fill the  sub Qualification name",
+            type: "red",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                    action: function () {
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+        return false;
+    }
+
+    getUserLocation().then(({ latitude, longitude }) => {
+        formData.append('latitude', latitude);
+        formData.append('longitude', longitude);
+        makeAjaxRequestSubQualificationUpdate(formData);
+    });
+
+});
+
+function makeAjaxRequestSubQualificationUpdate(formData) {
+    $.ajax({
+        url: "/update-sub-qualification-data",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            $("#loader").show();
+        },
+        success: function (response) {
+            $("#loader").hide();
+            handleResponse(response);
+        },
+        error: function (xhr, status, error) {
+            $("#loader").hide();
+            console.error("Error:", error);
+            showAlert("Error!", "Something went wrong!");
+        },
+    });
+}
+///Update Sub Qualification
