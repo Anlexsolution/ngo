@@ -628,6 +628,17 @@ class loan_product_controller extends Controller
         return view('pages.permission.loan.create_loan_product_per', ['getloanMainCatData' => $getloanMainCatData, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
+        function updateLoanProduct($id)
+    {
+        $decId = Crypt::decrypt($id);
+        $loanProductData = loanproduct::find($decId);
+        $getUserRole = userRole::all();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getloanMainCatData = loanpurpose::all();
+        return view('pages.permission.loan.update_loan_product_per', [ 'decId' => $decId,  'loanProductData' => $loanProductData,  'getloanMainCatData' => $getloanMainCatData, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+    }
+
     function createProduct(Request $request)
     {
         try {
@@ -677,6 +688,73 @@ class loan_product_controller extends Controller
             $result = InsertHelper::insertRecord($tableName, $data);
             if ($result === true) {
                 return response()->json(['success' => 'Create Product successfully', 'code' => 200]);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+       function updateProduct(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update product: ' . $request->input('txtProductName');
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $tableName = 'loanproducts';
+            $data = [
+                'productName' => $request->input('txtProductName'),
+                'description' => $request->input('txtDescription'),
+                'defaultPrincipal' => $request->input('txtDefaultPrincipel'),
+                'minimumPrincipal' => $request->input('txtMinimumPrincipel'),
+                'maximumPrincipal' => $request->input('txtMaximumPrincipel'),
+                'defaultLoanTerm' => $request->input('txtDefaultLoanTerm'),
+                'minimumLoanTerm' => $request->input('txtMinimumLoanTerm'),
+                'maximumLoanTerm' => $request->input('txtMaximumLoanTerm'),
+                'repaymentFrequency' => $request->input('txtRepaymentFrequency'),
+                'repaymentPeriod' => $request->input('txtRepaymentPreriod'),
+                'defaultInterest' => $request->input('txtDefaultInterest'),
+                'minimumInterest' => $request->input('txtMinimumInterest'),
+                'maximumInterest' => $request->input('txtMaximumInterest'),
+                'per' => $request->input('txtPer'),
+                'active' => $request->input('txtActive'),
+                'interestType' => $request->input('txtInterestType'),
+                'appprovalCount' => $request->input('txtApprovalCount'),
+                'mainCategory' => $request->input('txtMainCategory'),
+                'subCategory' => $request->input('txtSubCategory'),
+            ];
+
+            $result = UpdateHelper::updateRecord($tableName, $request->input('txtLoanProductId') , $data);
+            if ($result === true) {
+                return response()->json(['success' => 'Updated Product successfully', 'code' => 200]);
                 $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
             } else {
                 return response()->json(['error' => $result['error'], 'code' => 500]);

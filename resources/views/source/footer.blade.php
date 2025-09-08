@@ -296,6 +296,10 @@ async function getUserLocation() {
 <script src="pages-custom-js/loan_product.js?v=<?= date('His') ?>"></script>
 @endif
 
+@if ($pageName == 'update_loan_product')
+<script src="../pages-custom-js/loan_product_update.js?v=<?= date('His') ?>"></script>
+@endif
+
 @if ($pageName == 'create_old_loan')
 <script src="pages-custom-js/manage_old_loan.js?v=<?= date('His') ?>"></script>
 @endif

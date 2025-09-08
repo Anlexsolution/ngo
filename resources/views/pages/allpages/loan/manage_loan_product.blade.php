@@ -30,6 +30,9 @@
                                     $count = 1;
                                 @endphp
                                 @foreach ($getProductData as $data)
+                                @php
+                                    $encId = Crypt::encrypt($data->id);
+                                @endphp
                                     <tr>
                                         <td>{{$count++}}</td>
                                         <td>{{$data->productName}}</td>
@@ -53,7 +56,7 @@
                                                         href="#"><i
                                                             class="ti ti-eye me-1"></i> View</a>
                                                     <a class="dropdown-item"
-                                                        href="#"><i
+                                                        href="{{ route('update_loan_product', $encId) }}"><i
                                                             class="ti ti-pencil me-1"></i> Edit</a>
                                                 </div>
                                             </div>

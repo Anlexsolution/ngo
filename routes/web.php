@@ -198,6 +198,7 @@ Route::post('/loan-write-off-data', [loan_request_controller::class, 'loanWriteO
 //Manage Loan
 Route::get('/manage_loan_product', [loan_product_controller::class, 'manageLoanProduct'])->middleware('auth');
 Route::get('/create_loan_product', [loan_product_controller::class, 'createLoanProduct'])->middleware('auth');
+Route::get('/update_loan_product/{id}', [loan_product_controller::class, 'updateLoanProduct'])->middleware('auth')->name('update_loan_product');
 Route::get('/list_of_loan', [loan_controller::class, 'listOfLoan'])->middleware('auth');
 Route::get('/create_loan', [loan_controller::class, 'createLoan'])->middleware('auth');
 Route::get('/update_old_loan/{id}', [loan_controller::class, 'update_old_loan'])->middleware('auth')->name('update_old_loan');
@@ -212,6 +213,7 @@ Route::get('/manage_approval_settings', [loan_product_controller::class, 'manage
 Route::get('/create_loan_request/{id}', [loan_controller::class, 'createLoanRequest'])->middleware('auth')->name('create_loan_request');
 
 Route::post('/create-product-data', [loan_product_controller::class, 'createProduct'])->middleware('auth');
+Route::post('/update-product-data', [loan_product_controller::class, 'updateProduct'])->middleware('auth');
 Route::post('/add-purpose-data', [loan_product_controller::class, 'addPurpose'])->middleware('auth');
 Route::post('/create-new-loan', [loan_controller::class, 'createLoanFinal'])->middleware('auth');
 Route::post('/create-loan-first-step', [loan_product_controller::class, 'createLoanFirst'])->middleware('auth');
