@@ -153,12 +153,14 @@ class loan_product_controller extends Controller
 
                 UpdateHelper::updateRecord('savings', $getSavId, ['totalAmount' => $totalSavingAmount]);
 
+                $randomId = str_pad(rand(1, 999999999), 12, '0', STR_PAD_LEFT);
+
                 InsertHelper::insertRecord('savingtransectionhistories', [
                     'memberId' => $getUniqueId,
                     'savingId' => $getSavIdUnique,
                     'userId' => $userId,
                     'balance' => $totalSavingAmount,
-                    'randomId' => str_pad(rand(1, 999999999), 12, '0', STR_PAD_LEFT),
+                    'randomId' => $randomId,
                     'type' => 'Credit',
                     'amount' => $txtSavingAmount,
                     'description' => 'Saving Only Collection'
@@ -180,7 +182,7 @@ class loan_product_controller extends Controller
                 ]);
             }
 
-            return response()->json(['success' => 'Saving Amount collected successfully', 'code' => 200]);
+            return response()->json(['success' => 'Saving Amount collected successfully', 'code' => 205, 'randomId' => $randomId]);
         }
 
         // Loan Repayment

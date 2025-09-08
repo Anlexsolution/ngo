@@ -27,4 +27,14 @@ class receipt_controller extends Controller
         $getAllMemberData = member::all();
         return view('receipts.repayment_recipet', [ 'getmemSavDetails' => $getmemSavDetails, 'getmemApproverDetails' => $getmemApproverDetails, 'getmemDetails' => $getmemDetails, 'getloanDetails' => $getloanDetails, 'getData' => $getData, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
+
+        function savings_receipt($id){
+        $getData = DB::table('savingtransectionhistories')->where('randomId', $id)->first();
+        $getmemDetails = DB::table('members')->where('uniqueId', $getData->memberId)->first();
+        $getmemApproverDetails = DB::table('users')->where('id', $getData->userId)->first();
+        $getmemSavDetails = DB::table('savings')->where('memberId', $getmemDetails->uniqueId)->first();
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        return view('receipts.savings_receipt', [ 'getmemSavDetails' => $getmemSavDetails, 'getmemApproverDetails' => $getmemApproverDetails, 'getmemDetails' => $getmemDetails, 'getData' => $getData, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+    }
 }

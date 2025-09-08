@@ -103,42 +103,14 @@ $('body').on('click', '#btnUpdateOldLoan', function(){
    formData.append("_token", CSRF_TOKEN);
    // Get the CSRF token
 
-      var txtLoanIdUpdate = $('#txtLoanIdUpdate').val();
-   formData.append('txtLoanIdUpdate', txtLoanIdUpdate);
-
-   var txtSelectMember = $('#txtSelectMember').val();
-   formData.append('txtSelectMember', txtSelectMember);
-
-   var txtLoanId = $('#txtLoanId').val();
-   formData.append('txtLoanId', txtLoanId);
-
-   var txtLoanAmount = $('#txtLoanAmount').val();
-   formData.append('txtLoanAmount', txtLoanAmount);
-
-   var txtLoanTerm = $('#txtLoanTerm').val();
-   formData.append('txtLoanTerm', txtLoanTerm);
-
-   var txtRepaymentFrequency = $('#txtRepaymentFrequency').val();
-   formData.append('txtRepaymentFrequency', txtRepaymentFrequency);
-
-   var txtInterestRate = $('#txtInterestRate').val();
-   formData.append('txtInterestRate', txtInterestRate);
-
-   var txtRepaymentPreriod = $('#txtRepaymentPreriod').val();
-   formData.append('txtRepaymentPreriod', txtRepaymentPreriod);
-
-   var txtPer = $('#txtPer').val();
-   formData.append('txtPer', txtPer);
-
-
-   var txtLoanOfficer = $('#txtLoanOfficer').val();
-   formData.append('txtLoanOfficer', txtLoanOfficer);
-
-   var txtLoanPurpose = $('#txtLoanPurpose').val();
-   formData.append('txtLoanPurpose', txtLoanPurpose);
-
       var txtLoanGuarantors = $('#txtLoanGuarantors').val();
    formData.append('txtLoanGuarantors', txtLoanGuarantors);
+
+         var txtLoanType = $('#txtLoanType').val();
+   formData.append('txtLoanType', txtLoanType);
+
+            var txtLoanIdUpdate = $('#txtLoanIdUpdate').val();
+   formData.append('txtLoanIdUpdate', txtLoanIdUpdate);
 
    var txtFollowerName = $('#txtFollowerName').val();
    formData.append('txtFollowerName', txtFollowerName);
@@ -158,46 +130,7 @@ $('body').on('click', '#btnUpdateOldLoan', function(){
    var txtFollowerProfession = $('#txtFollowerProfession').val();
    formData.append('txtFollowerProfession', txtFollowerProfession);
 
-      var txtLoanDate = $('#txtLoanDate').val();
-   formData.append('txtLoanDate', txtLoanDate);
 
-      if(txtLoanDate == ''){
-       $.alert({
-           title: "Error!",
-           content: "Please select the loan date",
-           type: "red",
-           theme: 'modern',
-           buttons: {
-               okay: {
-                   text: "Okay",
-                   btnClass: "btn-red",
-                   action: function () {
-                       $("#loader").hide();
-                   },
-               },
-           },
-       });
-       return false;
-   }
-
-   if(txtSelectMember == ''){
-       $.alert({
-           title: "Error!",
-           content: "Please select member",
-           type: "red",
-           theme: 'modern',
-           buttons: {
-               okay: {
-                   text: "Okay",
-                   btnClass: "btn-red",
-                   action: function () {
-                       $("#loader").hide();
-                   },
-               },
-           },
-       });
-       return false;
-   }
 
    getUserLocation().then(({ latitude, longitude }) => {
        formData.append('latitude', latitude);

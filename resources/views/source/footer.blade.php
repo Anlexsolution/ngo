@@ -441,6 +441,10 @@ pages-custom-js/create_loan_request.js?v=<?= date('His') ?>"></script>
             let message = response.success;
             let transectionId = response.transId;
             showAlertSuccessTransectionRepay("Success", message, transectionId)
+        } else if (response.code == 205) {
+            let message = response.success;
+            let randomId = response.randomId;
+            showAlertSuccessTransectionSavings("Success", message, randomId)
         } else if (response.code == 202) {
             let
                 message = response.success;
@@ -543,6 +547,35 @@ pages-custom-js/create_loan_request.js?v=<?= date('His') ?>"></script>
                     action: function() {
                         window.open(`{{ route('repayment_receipt', ':id') }}`.replace(':id',
                             transectionId));
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+            },
+        });
+    }
+
+        function showAlertSuccessTransectionSavings(title, content, randomId) {
+        $.alert({
+            title: title,
+            content: content,
+            type: "green",
+            theme: 'modern',
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-green",
+                    action: function() {
+                        location.reload();
+                        $("#loader").hide();
+                    },
+                },
+                print: {
+                    text: "Print",
+                    btnClass: "btn-blue",
+                    action: function() {
+                        window.open(`{{ route('savings_receipt', ':id') }}`.replace(':id',
+                            randomId));
                         location.reload();
                         $("#loader").hide();
                     },

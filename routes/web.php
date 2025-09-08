@@ -239,6 +239,7 @@ Route::post('/update-purpose-main-cat-data', [manage_old_loan_controller::class,
 //Receipt
 Route::get('/direct_saving_receipt/{id}', [receipt_controller::class, 'directSavingReceipt'])->middleware('auth')->name('direct_saving_receipt');
 Route::get('/repayment_receipt/{id}', [receipt_controller::class, 'repaymentReceipt'])->middleware('auth')->name('repayment_receipt');
+Route::get('/savings_receipt/{id}', [receipt_controller::class, 'savings_receipt'])->middleware('auth')->name('savings_receipt');
 //Receipt
 
 //manage death

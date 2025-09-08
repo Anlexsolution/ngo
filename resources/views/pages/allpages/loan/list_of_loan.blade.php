@@ -158,12 +158,9 @@
                                                         <a class="dropdown-item"
                                                             href="{{ route('view_loan_details', $loanEncId) }}"><i
                                                                 class="ti ti-eye me-1"></i> View</a>
-                                                        @if ($data->loanType == 'Old')
-                                                            <a class="dropdown-item" href="{{ route('update_old_loan', $loanEncId) }}"><i
-                                                                    class="ti ti-pencil me-1"></i> Edit</a>
-                                                        @else
-                                                        
-                                                        @endif
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('update_old_loan', $loanEncId) }}"><i
+                                                                class="ti ti-pencil me-1"></i> Edit</a>
 
                                                     </div>
                                                 </div>
