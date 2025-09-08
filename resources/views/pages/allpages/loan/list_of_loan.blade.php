@@ -158,14 +158,19 @@
                                                         <a class="dropdown-item"
                                                             href="{{ route('view_loan_details', $loanEncId) }}"><i
                                                                 class="ti ti-eye me-1"></i> View</a>
-                                                        <a class="dropdown-item" href="#"><i
-                                                                class="ti ti-pencil me-1"></i> Edit</a>
+                                                        @if ($data->loanType == 'Old')
+                                                            <a class="dropdown-item" href="{{ route('update_old_loan', $loanEncId) }}"><i
+                                                                    class="ti ti-pencil me-1"></i> Edit</a>
+                                                        @else
+                                                        
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
                                     @else
-                                     @php
+                                        @php
                                             $divArray = auth()->user()->division;
                                             $vilArray = auth()->user()->village;
                                         @endphp

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Session;
 class manage_old_loan_controller extends Controller
 {
 
-     public function updatePurposeMaincatData(Request $request)
+    public function updatePurposeMaincatData(Request $request)
     {
 
         try {
@@ -38,14 +38,13 @@ class manage_old_loan_controller extends Controller
                 'name' => $txtUpdateMainCat,
             ];
 
-            $update = UpdateHelper::updateRecord($table, $txtMainCatId ,$data);
+            $update = UpdateHelper::updateRecord($table, $txtMainCatId, $data);
 
-            if($update) {
-                return response()->json(['success' => 'Updated purpose main category successfully', 'code' => 200 ]);
+            if ($update) {
+                return response()->json(['success' => 'Updated purpose main category successfully', 'code' => 200]);
             } else {
                 return response()->json(['error' => 'Failed to update record', 'code' => 500]);
             }
-
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'error' => 'Database error: ' . $e->getMessage(),
@@ -255,6 +254,168 @@ class manage_old_loan_controller extends Controller
                     $resultInsertSchedule = InsertHelper::insertRecord($tablePayment, $dataPayment);
                 }
                 return response()->json(['success' => 'Create old loan successfully', 'code' => 202, 'redirectUrl' => 'list_of_loan']);
+                $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
+            } else {
+                return response()->json(['error' => $result['error'], 'code' => 500]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            // Handle general errors
+            return response()->json([
+                'error' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+    function updateOldLoanData(Request $request)
+    {
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $txtSelectMember = $request->input('txtSelectMember');
+            $txtLoanId = $request->input('txtLoanId');
+            $txtLoanAmount = $request->input('txtLoanAmount');
+            $txtLoanTerm = $request->input('txtLoanTerm');
+            $txtRepaymentFrequency = $request->input('txtRepaymentFrequency');
+            $txtInterestRate = $request->input('txtInterestRate');
+            $txtRepaymentPreriod = $request->input('txtRepaymentPreriod');
+            $txtPer = $request->input('txtPer');
+            $txtLoanOfficer = $request->input('txtLoanOfficer');
+            $txtLoanPurpose = $request->input('txtLoanPurpose');
+            $txtLoanGuarantors = $request->input('txtLoanGuarantors');
+            $txtFollowerName = $request->input('txtFollowerName');
+            $txtFollowerAddress = $request->input('txtFollowerAddress');
+            $txtFollowerNic = $request->input('txtFollowerNic');
+            $txtFollowerNicIssueDate = $request->input('txtFollowerNicIssueDate');
+            $txtFollowerPhoneNumber = $request->input('txtFollowerPhoneNumber');
+            $txtFollowerProfession = $request->input('txtFollowerProfession');
+            $txtLoanDate = $request->input('txtLoanDate');
+            $txtLoanIdUpdate = $request->input('txtLoanIdUpdate');
+
+            //get location information
+            $latitude = $request->input('latitude');
+            $longitude = $request->input('longitude');
+
+            $geoData = GeolocationHelper::getGeolocationData($latitude, $longitude);
+
+            $location = $geoData['location'];
+            $country = $geoData['country'];
+            //get location information
+
+            $ipAddress = $request->ip();
+            $activityMessage = 'Update Old Loan: ' . $txtLoanId;
+            $type = 'Insert';
+            $className = 'bg-primary';
+
+            $table = 'loans';
+            $data = [
+                'memberId' => $txtSelectMember,
+                'loanProductId' => 0,
+                'principal' => $txtLoanAmount,
+                'loanterm' => $txtLoanTerm,
+                'repaymentFrequency' => $txtRepaymentFrequency,
+                'interestRate' => $txtInterestRate,
+                'repaymentPeriod' => $txtRepaymentPreriod,
+                'per' => $txtPer,
+                'interestType' => 'normal',
+                'loanOfficer' => $txtLoanOfficer,
+                'loanPurpose' => $txtLoanPurpose,
+                'gurrantos' => $txtLoanGuarantors,
+                'followerName' => $txtFollowerName,
+                'followerAddress' => $txtFollowerAddress,
+                'followerNic' => $txtFollowerNic,
+                'followerNicIssueDate' => $txtFollowerNicIssueDate,
+                'followerPhone' => $txtFollowerPhoneNumber,
+                'followerProfession' => $txtFollowerProfession,
+                'createStatus' => 1,
+                'loanStatus' => 'Active',
+                'approvalStatus' => 2,
+                'loanId' => $txtLoanId,
+                'loanType' => 'Old',
+                'created_at' => Carbon::parse($txtLoanDate)->setTime(7, 52, 24)->toDateTimeString(),
+            ];
+            $result = UpdateHelper::updateRecord($table, $txtLoanIdUpdate, $data);
+            if ($result === true) {
+                $getMaxLoanId = DB::table('loans')->max('id');
+                //set on loan schedule
+                // function calculateLoanScheduleWithMonthlyInterestMonth($loanAmount, $annualInterestRate, $loanTermMonths, $startDate)
+                // {
+                //     $monthlyInterestRate = ($annualInterestRate / 12) / 100; // Convert annual interest to monthly rate
+                //     $numRepayments = $loanTermMonths;
+
+                //     $remainingBalance = $loanAmount;
+                //     $schedule = [];
+
+                //     $paymentDate = new DateTime($startDate); // Start date as DateTime
+
+                //     // Installment 1: Initial balance, no payment yet
+                //     $schedule[] = [
+                //         'installment' => 1,
+                //         'payment_date' => $paymentDate->format('Y-m-d'),
+                //         'remaining_balance' => round($remainingBalance, 2),
+                //         'principal_payment' => 0.00,
+                //         'interest' => 0.00,
+                //         'total_repayment' => 0.00,
+                //     ];
+
+                //     // Calculate fixed principal per month
+                //     $principalPayment = $loanAmount / $numRepayments;
+
+                //     // Generate the monthly repayment schedule
+                //     for ($i = 2; $i <= $numRepayments + 1; $i++) {
+                //         // Move to next month's payment date
+                //         $paymentDate->modify('+1 month');
+
+                //         // Monthly interest on remaining balance
+                //         $interest = $remainingBalance * $monthlyInterestRate;
+
+                //         // If it's the last payment, pay off all remaining balance
+                //         if ($i == $numRepayments + 1) {
+                //             $principalPayment = $remainingBalance;
+                //             $totalRepayment = $principalPayment + $interest;
+                //             $remainingBalance = 0;
+                //         } else {
+                //             $totalRepayment = $principalPayment + $interest;
+                //             $remainingBalance -= $principalPayment;
+                //         }
+
+                //         $schedule[] = [
+                //             'installment' => $i,
+                //             'payment_date' => $paymentDate->format('Y-m-d'),
+                //             'remaining_balance' => round($remainingBalance, 2),
+                //             'principal_payment' => round($principalPayment, 2),
+                //             'interest' => round($interest, 2),
+                //             'total_repayment' => round($totalRepayment, 2),
+                //         ];
+                //     }
+
+                //     return $schedule;
+                // }
+                // //set on loan schedule
+
+                // $loanSchedule = calculateLoanScheduleWithMonthlyInterestMonth($txtLoanAmount, $txtInterestRate, $txtLoanTerm, $txtLoanDate);
+                // foreach ($loanSchedule as $payment) {
+                //     $tablePayment = 'loanschedules';
+                //     $dataPayment = [
+                //         'loanId' => $getMaxLoanId,
+                //         'paymentDate' => $payment['payment_date'],
+                //         'monthlyPayment' => $payment['total_repayment'],
+                //         'principalPayment' => $payment['principal_payment'],
+                //         'interestPayment' =>  $payment['interest'],
+                //         'balance' => $payment['remaining_balance'],
+                //         'status' => 'unPaid'
+                //     ];
+                //     $resultInsertSchedule = InsertHelper::insertRecord($tablePayment, $dataPayment);
+                // }
+                return response()->json(['success' => 'Update old loan successfully', 'code' => 202, 'redirectUrl' => 'list_of_loan']);
                 $activityLogResult = activityLogHelper::activityLog($ipAddress, $location, $country, $activityMessage, $type, $className);
             } else {
                 return response()->json(['error' => $result['error'], 'code' => 500]);

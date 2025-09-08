@@ -7,6 +7,7 @@ use App\Helpers\GeolocationHelper;
 use App\Helpers\InsertHelper;
 use App\Helpers\UpdateHelper;
 use App\Http\Controllers\Controller;
+use App\Models\division;
 use App\Models\gndivision;
 use App\Models\gndivisionsmallgroup;
 use App\Models\loan;
@@ -758,6 +759,25 @@ class loan_controller extends Controller
         $getLoanRequestData = loanrequest::all();
         $getLoanApproveSetData = loanapprovalsetting::all();
         return view('pages.permission.loan.create_loan_per', ['getLoanApproveSetData' => $getLoanApproveSetData, 'getLoanRequestData' => $getLoanRequestData, 'getUserRole' => $getUserRole, 'getMember' => $getMember, 'getLoanProduct' => $getLoanProduct, 'getLoanPurpose' => $getLoanPurpose, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+    }
+
+
+        function update_old_loan($id)
+    {
+        $DecId = Crypt::decrypt($id);
+        $getLoanUnique = loan::find($DecId);
+        $getUserRole = userRole::all();
+        $getMember = member::all();
+        $getDivision = division::all();
+        $getProfession = profession::all();
+        $villages = [];
+        $smallGroups = [];
+        $getLoansData = loan::all();
+        $getAllMemberData = member::all();
+        $getLoanOfficer = DB::table('users')->where('userType', 'Field Officer')->get();
+        $getLoanPurpose = DB::table('loanpurposes')->get();
+        $getPro = DB::table('professions')->get();
+        return view('pages.permission.loan.update_old_loan_per', [ 'DecId' => $DecId, 'getLoanUnique' => $getLoanUnique, 'getPro' => $getPro, 'getLoanPurpose' => $getLoanPurpose, 'getUserRole' => $getUserRole, 'getLoanOfficer' => $getLoanOfficer, 'getMember' => $getMember, 'getDivision' => $getDivision,  'villages' => $villages,  'smallGroups' => $smallGroups, 'getProfession' => $getProfession, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function getLoanProduct(Request $request)

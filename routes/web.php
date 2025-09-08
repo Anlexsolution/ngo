@@ -200,6 +200,7 @@ Route::get('/manage_loan_product', [loan_product_controller::class, 'manageLoanP
 Route::get('/create_loan_product', [loan_product_controller::class, 'createLoanProduct'])->middleware('auth');
 Route::get('/list_of_loan', [loan_controller::class, 'listOfLoan'])->middleware('auth');
 Route::get('/create_loan', [loan_controller::class, 'createLoan'])->middleware('auth');
+Route::get('/update_old_loan/{id}', [loan_controller::class, 'update_old_loan'])->middleware('auth')->name('update_old_loan');
 Route::post('/get-loan-product-data', [loan_controller::class, 'getLoanProduct'])->middleware('auth');
 Route::get('/manage_loan_purpose', [loan_controller::class, 'manageLoanPurpose'])->middleware('auth');
 Route::get('/loan_follower/{id}', [loan_controller::class, 'loanFollower'])->middleware('auth')->name('loan_follower');
@@ -231,6 +232,7 @@ Route::post('/get-loan-document-data', [loan_product_controller::class, 'loanDoc
 Route::get('/create_old_loan', [manage_old_loan_controller::class, 'createOldLoan'])->middleware('auth');
 Route::post('/get-old-loan-gurantos-data', [manage_old_loan_controller::class, 'getGurrandas'])->middleware('auth');
 Route::post('/create-old-loan-data', [manage_old_loan_controller::class, 'createOldLoanData'])->middleware('auth');
+Route::post('/update-old-loan-data', [manage_old_loan_controller::class, 'updateOldLoanData'])->middleware('auth');
 Route::post('/update-purpose-main-cat-data', [manage_old_loan_controller::class, 'updatePurposeMaincatData'])->middleware('auth');
 //Manage loan
 

@@ -300,6 +300,10 @@ async function getUserLocation() {
 <script src="pages-custom-js/manage_old_loan.js?v=<?= date('His') ?>"></script>
 @endif
 
+@if ($pageName == 'update_old_loan')
+<script src="../pages-custom-js/manage_old_loan_update.js?v=<?= date('His') ?>"></script>
+@endif
+
 @if ($pageName == 'create_loan_request')
 <script src="../
 pages-custom-js/create_loan_request.js?v=<?= date('His') ?>"></script>
