@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               notEmpty: {
                 message: 'Please enter user role name'
               },
-             
+
             }
           }
         },
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               notEmpty: {
                 message: 'Please enter main menu name'
               },
-             
+
             }
           },
           menuIcon: {
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               notEmpty: {
                 message: 'Please enter menu icon'
               },
-             
+
             }
           }
         },
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               notEmpty: {
                 message: 'Please select the main menu'
               },
-             
+
             }
           },
           subMenuName: {
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               notEmpty: {
                 message: 'Please enter your sub menu name'
               },
-             
+
             }
           }
         },
@@ -548,3 +548,58 @@ document.addEventListener('DOMContentLoaded', function (e) {
   })();
 });
 //CREATE GN DIVISION FORM - START
+
+
+//UPDATE GN DIVISION - START
+// UPDATE GN DIVISION - START
+const gnDivisionFormUpdate = document.querySelector('#editGnDivisionForm');
+
+document.addEventListener('DOMContentLoaded', function (e) {
+  (function () {
+    if (gnDivisionFormUpdate) {
+      const fv = FormValidation.formValidation(gnDivisionFormUpdate, {
+        fields: {
+          editGnDivisionName: {
+            validators: {
+              notEmpty: {
+                message: 'Please enter GN division name'
+              }
+            }
+          },
+          editDivisionId: {
+            validators: {
+              notEmpty: {
+                message: 'Please select a division'
+              }
+            }
+          },
+          editId: {
+            validators: {
+              notEmpty: {
+                message: 'Invalid request, please refresh'
+              }
+            }
+          }
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap5: new FormValidation.plugins.Bootstrap5({
+            eleValidClass: '',
+            rowSelector: '.mb-6'
+          }),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          autoFocus: new FormValidation.plugins.AutoFocus()
+        },
+        init: instance => {
+          instance.on('plugins.message.placed', function (e) {
+            if (e.element.parentElement.classList.contains('input-group')) {
+              e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
+            }
+          });
+        }
+      });
+    }
+  })();
+});
+//UPDATE GN DIVISION FORM - START

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Session;
 class manage_division_controller extends Controller
 {
 
-        function getSmallGroupData(Request $request)
+    function getSmallGroupData(Request $request)
     {
         try {
             // Check CSRF token
@@ -92,7 +92,7 @@ class manage_division_controller extends Controller
         }
     }
 
-        function getVillageDataResource(Request $request)
+    function getVillageDataResource(Request $request)
     {
         try {
             // Check CSRF token
@@ -411,7 +411,7 @@ class manage_division_controller extends Controller
         $getGnSmallGroup = gndivisionsmallgroup::all();
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
-        return view('pages.permission.divisionbyvillage.village_details_per', [ 'getVillageData' => $getVillageData, 'getUsers' => $getUsers,  'getVillageFinalData' => $getDivisionFinalData, 'userDetails' => $userDetails, 'getUserRole' => $getUserRole, 'getGnDivision' => $getGnDivision, 'getDivision' => $getDivision, 'getGnSmallGroup' => $getGnSmallGroup, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'villageId' => $decId, 'memberData' => $memberData]);
+        return view('pages.permission.divisionbyvillage.village_details_per', ['getVillageData' => $getVillageData, 'getUsers' => $getUsers,  'getVillageFinalData' => $getDivisionFinalData, 'userDetails' => $userDetails, 'getUserRole' => $getUserRole, 'getGnDivision' => $getGnDivision, 'getDivision' => $getDivision, 'getGnSmallGroup' => $getGnSmallGroup, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'villageId' => $decId, 'memberData' => $memberData]);
     }
 
     function divisionDetailsView($id)
@@ -438,7 +438,7 @@ class manage_division_controller extends Controller
         $getGnSmallGroup = gndivisionsmallgroup::all();
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
-        return view('pages.permission.divisionbyvillage.division_details_per', ['getDeviData' => $getDeviData,'getUsers' => $getUsers,  'getDivisionFinalData' => $getDivisionFinalData, 'userDetails' => $userDetails, 'getUserRole' => $getUserRole, 'getGnDivision' => $getGnDivision, 'getDivision' => $getDivision, 'getGnSmallGroup' => $getGnSmallGroup, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'divisionId' => $decId, 'memberData' => $memberData]);
+        return view('pages.permission.divisionbyvillage.division_details_per', ['getDeviData' => $getDeviData, 'getUsers' => $getUsers,  'getDivisionFinalData' => $getDivisionFinalData, 'userDetails' => $userDetails, 'getUserRole' => $getUserRole, 'getGnDivision' => $getGnDivision, 'getDivision' => $getDivision, 'getGnSmallGroup' => $getGnSmallGroup, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData, 'divisionId' => $decId, 'memberData' => $memberData]);
     }
     //
     public function manageDivision()
@@ -458,7 +458,12 @@ class manage_division_controller extends Controller
         $getDivision = division::all();
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
-        return view('pages.create_gn_division_per', ['getUserRole' => $getUserRole, 'getDivision' => $getDivision, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        $getGnDivisionData = DB::table('gndivisions')
+            ->leftJoin('divisions', 'gndivisions.divisionId', '=', 'divisions.id')
+            ->select('gndivisions.*', 'divisions.divisionName')
+            ->get();
+
+        return view('pages.create_gn_division_per', ['getGnDivisionData' => $getGnDivisionData, 'getUserRole' => $getUserRole, 'getDivision' => $getDivision, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     public function createSmallgroupBygn()
@@ -467,7 +472,13 @@ class manage_division_controller extends Controller
         $getDivision = division::all();
         $getLoansData = loan::all();
         $getAllMemberData = member::all();
-        return view('pages.permission.gndivision.create_smallgroup_by_gn_per', ['getDivision' => $getDivision, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
+        $getSmallGroups = DB::table('gndivisionsmallgroups')
+            ->leftJoin('divisions', 'gndivisionsmallgroups.divisionId', '=', 'divisions.id')
+            ->leftJoin('gndivisions', 'gndivisionsmallgroups.gnDivisionId', '=', 'gndivisions.id')
+            ->select('gndivisionsmallgroups.*', 'divisions.divisionName', 'gndivisions.gnDivisionName')
+            ->get();
+        $getGnDivSmallGroupData = DB::table('gndivisionsmallgroups')->get();
+        return view('pages.permission.gndivision.create_smallgroup_by_gn_per', ['getGnDivSmallGroupData' => $getGnDivSmallGroupData, 'getSmallGroups' => $getSmallGroups, 'getDivision' => $getDivision, 'getUserRole' => $getUserRole, 'getLoansData' => $getLoansData, 'getAllMemberData' => $getAllMemberData]);
     }
 
     function getGnDivision(Request $request)
@@ -536,6 +547,54 @@ class manage_division_controller extends Controller
         $gnDivision->save();
         return redirect()->back()->with('success', 'Gn division Added Successfully');
     }
+
+    public function updateGnDivisiondata(Request $request)
+    {
+
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $gnDivision = gndivision::findOrFail($request->input('editId'));
+            $gnDivision->divisionId = $request->input('editDivisionId');
+            $gnDivision->gnDivisionName = $request->input('editGnDivisionName');
+            $gnDivision->save();
+
+            return response()->json(['success' => true, 'code' => 200]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
+        public function updateSmallGroup(Request $request)
+    {
+
+        try {
+            // Check CSRF token
+            if ($request->_token !== Session::token()) {
+                return response()->json(['error' => 'CSRF token mismatch', 'code' => 403]);
+            }
+
+            $gnDivision = gndivisionsmallgroup::findOrFail($request->input('editSmallGroupId'));
+            $gnDivision->divisionId = $request->input('editSelectDivision');
+            $gnDivision->gnDivisionId = $request->input('editSelectGnDivision');
+            $gnDivision->smallGroupName = $request->input('editGnSmallGroup');
+            $gnDivision->save();
+
+            return response()->json(['success' => true, 'code' => 200]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage(),
+                'code' => 500,
+            ]);
+        }
+    }
+
 
     public function updateassignsmallgroup(Request $request)
     {

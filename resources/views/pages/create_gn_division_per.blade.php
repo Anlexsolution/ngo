@@ -20,7 +20,8 @@
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             @include('source.inlcude.superadminsidebar')
-
+{{-- CSRF Token Get --}}
+            <meta name="csrf-token" content="{{ csrf_token() }}">
             <div class="layout-page">
                 @include('source.inlcude.superadmintopbar')
                 @if ($userType == 'superAdmin')
@@ -52,6 +53,7 @@
         <div class="drag-target"></div>
     </div>
     @include('source.footer')
+ @include('source.inlcude.loader')
 </body>
 
 </html>

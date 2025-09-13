@@ -286,3 +286,314 @@ $('body').on('click', '#btnCreateGnSmallGroup', function(){
 
 });
 ////create gn division small group
+
+////update gn division
+$('body').on('click', '#btnUpdateGnDivision', function(){
+    $("#loader").show();
+   var formData = new FormData();
+
+   // Get the CSRF token
+   var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+   formData.append("_token", CSRF_TOKEN);
+   // Get the CSRF token
+
+   var editId = $('#editId').val();
+   formData.append('editId', editId);
+
+   var editDivisionId = $('#editDivisionId').val();
+   formData.append('editDivisionId', editDivisionId);
+
+   var editGnDivisionName = $('#editGnDivisionName').val();
+   formData.append('editGnDivisionName', editGnDivisionName);
+
+   if(editGnDivisionName == ''){
+    $('#editGnDivisionName').focus();
+       $.alert({
+           title: "Error!",
+           content: "Please select gn division",
+           type: "red",
+           theme: 'modern',
+           buttons: {
+               okay: {
+                   text: "Okay",
+                   btnClass: "btn-red",
+                   action: function () {
+                       $("#loader").hide();
+                   },
+               },
+           },
+       });
+       return false;
+   }
+
+
+
+   if(editDivisionId == ''){
+    $('#editDivisionId').focus();
+       $.alert({
+           title: "Error!",
+           content: "Please select division",
+           type: "red",
+           theme: 'modern',
+           buttons: {
+               okay: {
+                   text: "Okay",
+                   btnClass: "btn-red",
+                   action: function () {
+                       $("#loader").hide();
+                   },
+               },
+           },
+       });
+       return false;
+   }
+
+    // AJAX request
+    $.ajax({
+       url: "/updateGnDivisiondata",
+       type: "POST",
+       data: formData,
+       processData: false,
+       contentType: false,
+       beforeSend: function () {
+           $("#loader").show();
+       },
+       success: function (response) {
+           $("#loader").hide();
+           if (response.code == 200) {
+               $.alert({
+                   title: "Success!",
+                   content: "gn division updated successfully!",
+                   type: "green",
+                   theme: 'modern',
+                   buttons: {
+                       okay: {
+                           text: "Okay",
+                           btnClass: "btn-green",
+                           action: function () {
+                               location.reload();
+                           },
+                       },
+                   },
+               });
+           } else if (response.code == 403) {
+               $.alert({
+                   title: "Error!",
+                   content: "CSRF Error Try Again",
+                   type: "red",
+                   theme:'modern',
+                   buttons: {
+                       okay: {
+                           text: "Okay",
+                           btnClass: "btn-red",
+                           action: function () {
+                               $("#loader").hide();
+                           },
+                       },
+                   },
+               });
+           }else if (response.code == 500) {
+            $.alert({
+                title: "Error!",
+                content: response.error,
+                type: "red",
+                theme:'modern',
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                        action: function () {
+                            $("#loader").hide();
+                        },
+                    },
+                },
+            });
+        } else {
+               $.alert({
+                   title: "Error!",
+                   content: "Something went wrong!",
+                   type: "red",
+                   theme:'modern',
+                   buttons: {
+                       okay: {
+                           text: "Okay",
+                           btnClass: "btn-red",
+                           action: function () {
+                               $("#loader").hide();
+                           },
+                       },
+                   },
+               });
+           }
+       },
+       error: function (xhr, status, error) {
+           $("#loader").hide();
+           console.error("Error:", error);
+           $.alert({
+               title: "Error!",
+               content: "Something went wrong!",
+               type: "red",
+               buttons: {
+                   okay: {
+                       text: "Okay",
+                       btnClass: "btn-red",
+                       action: function () {
+                           $("#loader").hide();
+                           location.reload();
+                       },
+                   },
+               },
+           });
+       },
+   });
+
+});
+////update gn division
+
+
+
+////update Smallgroup
+$('body').on('click', '#btnUpdateSmallGroup', function(){
+    $("#loader").show();
+   var formData = new FormData();
+
+   // Get the CSRF token
+   var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+   formData.append("_token", CSRF_TOKEN);
+   // Get the CSRF token
+
+   var editSmallGroupId = $('#editSmallGroupId').val();
+   formData.append('editSmallGroupId', editSmallGroupId);
+
+   var editSelectDivision = $('#editSelectDivision').val();
+   formData.append('editSelectDivision', editSelectDivision);
+
+   var editSelectGnDivision = $('#editSelectGnDivision').val();
+   formData.append('editSelectGnDivision', editSelectGnDivision);
+
+      var editGnSmallGroup = $('#editGnSmallGroup').val();
+   formData.append('editGnSmallGroup', editGnSmallGroup);
+
+   if(editGnSmallGroup == ''){
+    $('#editGnSmallGroup').focus();
+       $.alert({
+           title: "Error!",
+           content: "Please enter smallgroup name",
+           type: "red",
+           theme: 'modern',
+           buttons: {
+               okay: {
+                   text: "Okay",
+                   btnClass: "btn-red",
+                   action: function () {
+                       $("#loader").hide();
+                   },
+               },
+           },
+       });
+       return false;
+   }
+
+
+
+    // AJAX request
+    $.ajax({
+       url: "/updateSmallGroup",
+       type: "POST",
+       data: formData,
+       processData: false,
+       contentType: false,
+       beforeSend: function () {
+           $("#loader").show();
+       },
+       success: function (response) {
+           $("#loader").hide();
+           if (response.code == 200) {
+               $.alert({
+                   title: "Success!",
+                   content: "Smallgroup updated successfully!",
+                   type: "green",
+                   theme: 'modern',
+                   buttons: {
+                       okay: {
+                           text: "Okay",
+                           btnClass: "btn-green",
+                           action: function () {
+                               location.reload();
+                           },
+                       },
+                   },
+               });
+           } else if (response.code == 403) {
+               $.alert({
+                   title: "Error!",
+                   content: "CSRF Error Try Again",
+                   type: "red",
+                   theme:'modern',
+                   buttons: {
+                       okay: {
+                           text: "Okay",
+                           btnClass: "btn-red",
+                           action: function () {
+                               $("#loader").hide();
+                           },
+                       },
+                   },
+               });
+           }else if (response.code == 500) {
+            $.alert({
+                title: "Error!",
+                content: response.error,
+                type: "red",
+                theme:'modern',
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                        action: function () {
+                            $("#loader").hide();
+                        },
+                    },
+                },
+            });
+        } else {
+               $.alert({
+                   title: "Error!",
+                   content: "Something went wrong!",
+                   type: "red",
+                   theme:'modern',
+                   buttons: {
+                       okay: {
+                           text: "Okay",
+                           btnClass: "btn-red",
+                           action: function () {
+                               $("#loader").hide();
+                           },
+                       },
+                   },
+               });
+           }
+       },
+       error: function (xhr, status, error) {
+           $("#loader").hide();
+           console.error("Error:", error);
+           $.alert({
+               title: "Error!",
+               content: "Something went wrong!",
+               type: "red",
+               buttons: {
+                   okay: {
+                       text: "Okay",
+                       btnClass: "btn-red",
+                       action: function () {
+                           $("#loader").hide();
+                           location.reload();
+                       },
+                   },
+               },
+           });
+       },
+   });
+
+});
+////update Smallgroup
